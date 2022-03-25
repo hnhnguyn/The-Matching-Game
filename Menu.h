@@ -7,11 +7,10 @@
 #include "Game.h"
 using namespace std;
 
-class Menu {
-private:
+struct Menu {
 	const static string menuList[4];
 	const static string playList[4];
-public:
+
 	Menu();
 	static void titleOutput();
 	static void menuOutput();

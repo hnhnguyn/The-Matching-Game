@@ -7,14 +7,14 @@
 #include "Menu.h"
 using namespace std;
 
-class Game {
-private:
-	CharArr _Arr;
+struct Game {
+	CharArr charArr;
 	const static string gameBtnList[3];
 	const static string menuBackList[2];
 	const static string pauseList[3];
-public:
-	Game();
+	int gameX;
+
+	Game(int);
 	void gameOutput(int, int);
 	void selectColor(int, int, int, int, int, int);
 	void inputProcess(int, int);

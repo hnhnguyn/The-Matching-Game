@@ -3,15 +3,20 @@ const string Game::gameBtnList[3] = { "BACK TO MENU: B", "PAUSE: P", "MUSIC: M" 
 const string Game::menuBackList[2] = { "YES", "NO" };
 const string Game::pauseList[3] = { "RESUME", "REPLAY", "BACK TO MENU" };
 
-Game::Game() {
+Game::Game(int n) {
 	Common::consoleSetup();
-	gameOutput(_Arr.getRow(), _Arr.getCol());
+	charArr.row = n; 
+	charArr.col = n;
+	charArr.arr = charArr.gen2DArr(charArr.gen1DArr(charArr.row * charArr.col), charArr.row, charArr.col);
+	gameX = centerX - (n - 4);
+	gameOutput(charArr.row, charArr.col);
 }
+
 
 void Game::selectColor(int x, int y, int background, int text, int i, int j) {
 	Common::goTo(x, y);
 	Common::setColor(background, text);
-	cout << _Arr.getArrElement(i, j);
+	cout << " " << charArr.arr[i][j] << " ";
 	Common::setColor(BLACK, WHITE);
 }
 
@@ -29,16 +34,16 @@ void Game::gameOutput(int row, int col) {
 			int y = gameY + distY * i;
 			Common::goTo(x, y);
 			if (x == gameX && y == gameY) {
-				Common::setColor(GRAY, BRIGHT_WHITE);
-				cout << _Arr.getArrElement(i, j);
+				Common::setColor(BRIGHT_WHITE, BLACK);
+				cout << " " << charArr.arr[i][j] << " ";
 				Common::setColor(BLACK, WHITE);
 			}
 			else {
-				cout << _Arr.getArrElement(i, j);
+				cout << " " << charArr.arr[i][j] << " ";
 			}
 		}
 	}
-	inputProcess(_Arr.getRow(), _Arr.getCol());
+	inputProcess(charArr.row, charArr.col);
 }
 
 void Game::inputProcess(int row, int col) {
@@ -58,12 +63,12 @@ void Game::inputProcess(int row, int col) {
 					selectColor(x, y, LIGHT_AQUA, BLACK, sltRow, sltCol);
 				}
 				else {
-					cout << _Arr.getArrElement(sltRow, sltCol);
+					cout << " " << charArr.arr[sltRow][sltCol] << " ";
 					
 				}
 				sltCol--;
 				x -= distX;
-				selectColor(x, y, GRAY, BRIGHT_WHITE, sltRow, sltCol);
+				selectColor(x, y, BRIGHT_WHITE, BLACK, sltRow, sltCol);
 			}
 			break;
 		case 2: //UP
@@ -73,13 +78,13 @@ void Game::inputProcess(int row, int col) {
 					selectColor(x, y, LIGHT_AQUA, BLACK, sltRow, sltCol);
 				}
 				else {
-					cout << _Arr.getArrElement(sltRow, sltCol);
+					cout << " " << charArr.arr[sltRow][sltCol] << " ";
 
 				}
 				sltRow--;
 				y -= distY;
 				Common::goTo(x, y);
-				selectColor(x, y, GRAY, BRIGHT_WHITE, sltRow, sltCol);
+				selectColor(x, y, BRIGHT_WHITE, BLACK, sltRow, sltCol);
 			}
 			break;
 		case 3: //DOWN
@@ -89,12 +94,12 @@ void Game::inputProcess(int row, int col) {
 					selectColor(x, y, LIGHT_AQUA, BLACK, sltRow, sltCol);
 				}
 				else {
-					cout << _Arr.getArrElement(sltRow, sltCol);
+					cout << " " << charArr.arr[sltRow][sltCol] << " ";
 
 				}
 				sltRow++;
 				y += distY;
-				selectColor(x, y, GRAY, BRIGHT_WHITE, sltRow, sltCol);
+				selectColor(x, y, BRIGHT_WHITE, BLACK, sltRow, sltCol);
 			}
 			break;
 		case 4: //RIGHT
@@ -104,19 +109,19 @@ void Game::inputProcess(int row, int col) {
 					selectColor(x, y, LIGHT_AQUA, BLACK, sltRow, sltCol);
 				}
 				else {
-					cout << _Arr.getArrElement(sltRow, sltCol);
+					cout << " " << charArr.arr[sltRow][sltCol] << " ";
 
 				}
 				sltCol++;
 				x += distX;
-				selectColor(x, y, GRAY, BRIGHT_WHITE, sltRow, sltCol);
+				selectColor(x, y, BRIGHT_WHITE, BLACK, sltRow, sltCol);
 			}
 			break;
 		case 5: //SPACE / ENTER
-			if(_Arr.getArrElement(sltRow, sltCol) != ' ') {
+			if(charArr.arr[sltRow][sltCol] != ' ') {
 				if (sltedRow == sltRow && sltedCol == sltCol) {
 					Common::goTo(x, y);
-					selectColor(x, y, GRAY, BRIGHT_WHITE, sltRow, sltCol);
+					selectColor(x, y, BRIGHT_WHITE, BLACK, sltRow, sltCol);
 					sltedRow = -1;
 					sltedCol = -1;
 					sltCnt = 0;
@@ -131,10 +136,10 @@ void Game::inputProcess(int row, int col) {
 					}
 					else if (sltCnt == 2) {
 						if (Game::matchCheck(sltedRow, sltedCol, sltRow, sltCol)) {
-							_Arr.setArrElement(sltedRow, sltedCol, ' ');
+							charArr.arr[sltedRow][sltedCol] = ' ';
 							selectColor(sltedX, sltedY, BLACK, WHITE, sltedRow, sltedCol);
-							_Arr.setArrElement(sltRow, sltCol, ' ');
-							selectColor(x, y, GRAY, BRIGHT_WHITE, sltRow, sltCol);
+							charArr.arr[sltRow][sltCol] = ' ';
+							selectColor(x, y, BRIGHT_WHITE, BLACK, sltRow, sltCol);
 							chCnt += 2;
 						}
 						else {
@@ -165,14 +170,14 @@ void Game::inputProcess(int row, int col) {
 }
 
 bool Game::matchCheck(int preRow, int preCol, int postRow, int postCol) {
-	if (_Arr.getArrElement(preRow, preCol) == _Arr.getArrElement(postRow, postCol)) {
+	if (charArr.arr[preRow][preCol] == charArr.arr[postRow][postCol]) {
 		if (preRow == postRow) {
-			if (preRow == 0 || preRow == _Arr.getRow() - 1 || checkIMatch(preRow, preCol, postRow, postCol)) {
+			if (preRow == 0 || preRow == charArr.row - 1 || checkIMatch(preRow, preCol, postRow, postCol)) {
 				return 1;
 			}
 		}
 		if (preCol == postCol) {
-			if (preCol == 0 || preCol == _Arr.getCol() - 1 || checkIMatch(preRow, preCol, postRow, postCol)) {
+			if (preCol == 0 || preCol == charArr.col - 1 || checkIMatch(preRow, preCol, postRow, postCol)) {
 				return 1;
 			}
 		}
@@ -194,7 +199,7 @@ bool Game::checkIMatch(int preRow, int preCol, int postRow, int postCol) {
 			swap(preCol, postCol);
 		}
 		for (int j = preCol + 1; j < postCol; j++) {
-			if (_Arr.getArrElement(row, j) != ' ') {
+			if (charArr.arr[row][j] != ' ') {
 				check = 0;
 			}
 		}
@@ -205,7 +210,7 @@ bool Game::checkIMatch(int preRow, int preCol, int postRow, int postCol) {
 			swap(preRow, postRow);
 		}
 		for (int i = preRow + 1; i < postRow; i++) {
-			if (_Arr.getArrElement(i, col) != ' ') {
+			if (charArr.arr[i][col] != ' ') {
 				check = 0;
 			}
 		}
@@ -218,10 +223,10 @@ bool Game::checkLMatch(int preRow, int preCol, int postRow, int postCol) {
 		swap(preRow, postRow);
 		swap(preCol, postCol);
 	}
-	if (checkIMatch(preRow, preCol, preRow, postCol) && _Arr.getArrElement(preRow, postCol) == ' ' && checkIMatch(preRow, postCol, postRow, postCol)) {
+	if (checkIMatch(preRow, preCol, preRow, postCol) && charArr.arr[preRow][postCol] == ' ' && checkIMatch(preRow, postCol, postRow, postCol)) {
 		return 1;
 	}
-	if (checkIMatch(preRow, preCol, postRow, preCol) && _Arr.getArrElement(postRow, preCol) == ' ' && checkIMatch(postRow, preCol, postRow, postCol)) {
+	if (checkIMatch(preRow, preCol, postRow, preCol) && charArr.arr[postRow][preCol] == ' ' && checkIMatch(postRow, preCol, postRow, postCol)) {
 		return 1;
 	}
 	return 0;
@@ -274,7 +279,7 @@ void Game::menuBackInput() {
 				input = 0;
 			}
 			else {
-				Game::gameOutput(_Arr.getRow(), _Arr.getCol());
+				Game::gameOutput(charArr.row, charArr.col);
 			}
 			break;
 		}
@@ -326,7 +331,7 @@ void Game::pauseInput() {
 			break;
 		case 5:
 			if (slti == 0) {
-				gameOutput(_Arr.getRow(), _Arr.getCol());
+				gameOutput(charArr.row, charArr.col);
 			}
 			else if (slti == 1) {
 				Menu::menuPlayOutput();

@@ -120,13 +120,13 @@ void Menu::menuPlayInput() {
 			break;
 		case 5:
 			if (slti == 0) {
-				Game::Game();
+				Game::Game(4);
 			}
 			else if (slti == 1) {
-				Game::Game();
+				Game::Game(6);
 			}
 			else if (slti == 2) {
-				Game::Game();
+				Game::Game(8);
 			}
 			else if (slti == 3) {
 				menuOutput();

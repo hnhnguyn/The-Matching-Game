@@ -33,14 +33,12 @@ using namespace std;
 #define ansY 5
 #define btnX 30
 #define btnY 2
-#define gameX 50
 #define gameY 10
 #define botY 17
 
-class Common {
-private:
+struct Common {
 	const static string exitList[2];
-public:
+
 	Common() {}
 	~Common() {}
 	static void consoleSetup();
