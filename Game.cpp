@@ -171,17 +171,15 @@ void Game::inputProcess(int row, int col) {
 
 bool Game::matchCheck(int preRow, int preCol, int postRow, int postCol) {
 	if (charArr.arr[preRow][preCol] == charArr.arr[postRow][postCol]) {
-		if (preRow == postRow) {
-			if (preRow == 0 || preRow == charArr.row - 1 || checkIMatch(preRow, preCol, postRow, postCol)) {
-				return 1;
-			}
-		}
-		if (preCol == postCol) {
-			if (preCol == 0 || preCol == charArr.col - 1 || checkIMatch(preRow, preCol, postRow, postCol)) {
+		if (preRow == postRow || preCol == postCol) {
+			if (checkIMatch(preRow, preCol, postRow, postCol)) {
 				return 1;
 			}
 		}
 		if (checkLMatch(preRow, preCol, postRow, postCol)) {
+			return 1;
+		}
+		if (checkUMatch(preRow, preCol, postRow, postCol)) {
 			return 1;
 		}
 		return 0;
@@ -231,6 +229,129 @@ bool Game::checkLMatch(int preRow, int preCol, int postRow, int postCol) {
 	}
 	return 0;
 }
+
+bool Game::checkUMatch(int preRow, int preCol, int postRow, int postCol) {
+	if (preCol == postCol) {
+		if (preCol == 0 || preCol == charArr.col - 1) {
+			return 1;
+		}
+	}
+	if (preRow == postRow) {
+		if (preRow == 0 || preRow == charArr.row - 1) {
+			return 1;
+		}
+	} else if (preRow > postRow) {
+		swap(preRow, postRow);
+		swap(preCol, postCol);
+	}
+	int check = 0;
+	for (int i = preRow; i > 0; i--) {
+		check++;
+		if (checkIMatch(preRow, preCol, i - 1, preCol) && charArr.arr[i - 1][preCol] == ' ' && checkLMatch(i - 1, preCol, postRow, postCol)) {
+			return 1;
+		}
+		if (i == 1) {
+			if (checkIMatch(preRow, preCol, i - 1, preCol) && charArr.arr[i - 1][preCol] == ' ' && checkIMatch(i - 1, postCol, postRow, postCol) && charArr.arr[i - 1][postCol] == ' ') {
+				return 1;
+			}
+		}
+	}
+	if (check == 0) {
+		if (checkIMatch(postRow, postCol, 0, postCol) && charArr.arr[0][postCol] == ' ') {
+			return 1;
+		}
+	}
+	check = 0;
+	for (int i = postRow; i < charArr.row - 1; i++) {
+		check++;
+		if (checkIMatch(preRow, preCol, i + 1, preCol) && charArr.arr[i + 1][preCol] == ' ' && checkLMatch(i + 1, preCol, postRow, postCol)) {
+			return 1;
+		}
+		if (i == charArr.row - 2) {
+			if (checkIMatch(preRow, preCol, i + 1, preCol) && charArr.arr[i + 1][preCol] == ' ' && checkIMatch(i + 1, postCol, postRow, postCol) && charArr.arr[i + 1][postCol] == ' ') {
+				return 1;
+			}
+		}
+	}
+	if (check == 0) {
+		if (checkIMatch(preRow, preCol, charArr.row - 1, preCol) && charArr.arr[charArr.row - 1][preCol] == ' ') {
+			return 1;
+		}
+	}
+	check = 0;
+	if (preCol <= postCol) {
+		for (int i = 0; i < preCol; i++) {
+			check++;
+			if (i == 0) {
+				if (checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ' && checkIMatch(postRow, postCol, postRow, i) && charArr.arr[postRow][i] == ' ') {
+					return 1;
+				}
+			}
+			if (checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ' && checkLMatch(preRow, i, postRow, postCol)) {
+				return 1;
+			}
+		}
+		if (check == 0) {
+			if (checkIMatch(postRow, 0, postRow, postCol) && charArr.arr[postRow][0] == ' ') {
+				return 1;
+			}
+		}
+		check = 0;
+		for (int i = postCol + 1; i < charArr.col; i++) {
+			check++;
+			if (checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ' && checkLMatch(preRow, i, postRow, postCol)) {
+				return 1;
+			}
+			if (i == charArr.col - 1) {
+				if (checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ' && checkIMatch(postRow, postCol, postRow, i) && charArr.arr[postRow][i] == ' ') {
+					return 1;
+				}
+			}
+		}
+		if (check == 0) {
+			if (checkIMatch(preRow, preCol, preRow, charArr.col - 1) && charArr.arr[preRow][charArr.col - 1]) {
+				return 1;
+			}
+		}
+	}
+	else {
+		for (int i = 0; i < postCol; i++) {
+			check++;
+			if (i == 0) {
+				if (checkIMatch(postRow, postCol, postRow, i) && charArr.arr[postRow][i] == ' ' && checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ') {
+					return 1;
+				}
+			}
+			if (checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ' && checkLMatch(preRow, i, postRow, postCol)) {
+				return 1;
+			}
+		}
+		if (check == 0) {
+			if (checkIMatch(preRow, 0, preRow, preCol) && charArr.arr[preRow][0] == ' ') {
+				return 1;
+			}
+		}
+		check = 0;
+		for (int i = preCol + 1; i < charArr.col; i++) {
+			check++;
+			if (checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ' && checkLMatch(preRow, i, postRow, postCol)) {
+				return 1;
+			}
+			if (i == charArr.col - 1) {
+				if (checkIMatch(postRow, postCol, postRow, i) && charArr.arr[postRow][i] == ' ' && checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ') {
+					return 1;
+				}
+			}
+		}
+		if (check == 0) {
+			if (checkIMatch(postRow, postCol, postRow, charArr.col - 1) && charArr.arr[postRow][charArr.col - 1]) {
+				return 1;
+			}
+		}
+	}
+	return 0;
+}
+
 
 void Game::menuBackScreen() {
 	system("cls");

@@ -1,5 +1,3 @@
-//Nguyen Hong Hanh - 21127503 - HCMUS
-
 #include <iostream>
 #include <windows.h>
 #include "Common.h"

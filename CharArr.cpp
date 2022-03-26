@@ -44,7 +44,7 @@ char* randomSortArr(char*& ch, int n) {
 }
 
 char* CharArr::gen1DArr(int n) {
-	char* ch;
+	char* ch = new char[n];
 
 	srand(time(NULL));
 
