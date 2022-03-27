@@ -182,6 +182,9 @@ bool Game::matchCheck(int preRow, int preCol, int postRow, int postCol) {
 		if (checkUMatch(preRow, preCol, postRow, postCol)) {
 			return 1;
 		}
+		if (checkZMatch(preRow, preCol, postRow, postCol)) {
+			return 1;
+		}
 		return 0;
 	}
 	else {
@@ -345,6 +348,33 @@ bool Game::checkUMatch(int preRow, int preCol, int postRow, int postCol) {
 		}
 		if (check == 0) {
 			if (checkIMatch(postRow, postCol, postRow, charArr.col - 1) && charArr.arr[postRow][charArr.col - 1]) {
+				return 1;
+			}
+		}
+	}
+	return 0;
+}
+
+bool Game::checkZMatch(int preRow, int preCol, int postRow, int postCol) {
+	if (preRow > postRow) {
+		swap(preRow, postRow);
+		swap(preCol, postCol);
+	}
+	for (int i = preRow + 1; i < postRow; i++) {
+		if (checkIMatch(preRow, preCol, i, preCol) && charArr.arr[i][preCol] == ' ' && checkLMatch(i, preCol, postRow, postCol)) {
+			return 1;
+		}
+	}
+	if (preCol < postCol) {
+		for (int i = preCol + 1; i < postCol; i++) {
+			if (checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ' && checkLMatch(preRow, i, postRow, postCol)) {
+				return 1;
+			}
+		}
+	}
+	else {
+		for (int i = postCol + 1; i < preCol; i++) {
+			if (checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ' && checkLMatch(preRow, i, postRow, postCol)) {
 				return 1;
 			}
 		}
