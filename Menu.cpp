@@ -2,7 +2,7 @@
 
 const string Menu::menuList[4] = { "PLAY", "TUTORIAL", "ABOUT", "EXIT" };
 const string Menu::playList[4] = { "EASY", "MEDIUM", "HARD", "BACK TO MENU" };
-const string Menu::doneList[3] = { "NEW GAME", "BACK TO MENU" };
+const string Menu::doneList[2] = { "NEW GAME", "BACK TO MENU" };
 
 Menu::Menu() {
 	Common::consoleSetup();
@@ -67,13 +67,13 @@ void Menu::menuInput() {
 				menuAbout();
 			}
 			else if (slti == 3) {
-				Common::exitOutput(1);
+				Common::exitOutput(0);
 				slti = 0;
 			}
 			break;
 		}
 	} while (input != 0);
-	Common::exitOutput(1);
+	Common::exitOutput(0);
 }
 
 void Menu::menuPlayOutput() {
@@ -136,7 +136,7 @@ void Menu::menuPlayInput() {
 		}
 
 	} while (input != 0);
-	Common::exitOutput(2);
+	Common::exitOutput(1);
 }
 
 void Menu::menuTutorial() {
@@ -152,7 +152,7 @@ void Menu::menuTutorial() {
 			break;
 		}
 	} while (input != 0);
-	Common::exitOutput(3);
+	Common::exitOutput(1);
 }
 
 void Menu::menuAbout() {
@@ -168,7 +168,7 @@ void Menu::menuAbout() {
 			break;
 		}
 	} while (input != 0);
-	Common::exitOutput(4);
+	Common::exitOutput(1);
 }
 
 void Menu::menuDoneOutput() {

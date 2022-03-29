@@ -47,15 +47,7 @@ int Common::getInput() {
 		}
 	case 27: //Esc
 		return 0;
-	case 65: case 97: //Left
-		return 1;
-	case 87: case 119: //Up
-		return 2;
-	case 83: case 115: //down
-		return 3;
-	case 68: case 100: //Right
-		return 4;
-	case 13: case 32: //Space, Enter
+	case 13: //Enter
 		return 5;
 	case 66: case 98: //B
 		return 6;
@@ -113,6 +105,9 @@ void Common::disableMaxButton() {
 }
 
 void Common::exitOutput(int i) {
+	if (i == 1) {
+		Menu::menuOutput();
+	}
 	system("cls");
 	Common::goTo(centerX, exitY);
 	cout << "DO YOU WANT TO EXIT?";
@@ -123,10 +118,10 @@ void Common::exitOutput(int i) {
 	y += distY;
 	Common::goTo(x, y);
 	cout << exitList[1];
-	exitInput(i);
+	exitInput();
 }
 
-void Common::exitInput(int i) {
+void Common::exitInput() {
 	int slti = 0;
 	int input = -1;
 	int x = centerX;
@@ -159,18 +154,7 @@ void Common::exitInput(int i) {
 				input = 0;
 			}
 			else {
-				switch (i) {
-				case 1:
-					Menu::menuOutput();
-				case 2:
-					Menu::menuPlayOutput();
-				case 3:
-					Menu::menuTutorial();
-				case 4:
-					Menu::menuAbout();
-				default:
-					Menu::menuOutput();
-				}
+				Menu::menuOutput();
 			}
 			break;
 		}

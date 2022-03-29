@@ -44,15 +44,11 @@ char* CharArr::randomSortArr(char*& ch, int n) {
 char* CharArr::gen1DArr(int n) {
 	static char* ch = new char[n];
 
-	/*srand(time(NULL));
+	srand(time(NULL));
 
-	randomCharArr(ch, n);*/
+	randomCharArr(ch, n);
 
-	for (int i = 0; i < n; i++) {
-		*(ch + i) = 'A';
-	}
-
-	return ch;
+	return randomSortArr(ch, n);
 }
 
 char** CharArr::gen2DArr(char* ch, int row, int col) {

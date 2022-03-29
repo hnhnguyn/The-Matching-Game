@@ -52,5 +52,5 @@ struct Common {
 	static void disableResizeWindow();
 	static void disableMaxButton();
 	static void exitOutput(int);
-	static void exitInput(int);
+	static void exitInput();
 };

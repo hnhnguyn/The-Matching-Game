@@ -10,7 +10,7 @@ using namespace std;
 struct Menu {
 	const static string menuList[4];
 	const static string playList[4];
-	const static string doneList[3];
+	const static string doneList[2];
 
 	Menu();
 	static void titleOutput();

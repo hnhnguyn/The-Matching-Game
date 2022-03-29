@@ -163,7 +163,8 @@ void Game::inputProcess(int row, int col) {
 		if (chCnt == row * col) {
 			Menu::menuDoneOutput();
 		}
-	} while (true);
+	} while (input != 0);
+	Game::pauseScreen();
 }
 
 bool Game::matchCheck(int preRow, int preCol, int postRow, int postCol) {
