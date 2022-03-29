@@ -41,18 +41,17 @@ char* CharArr::randomSortArr(char*& ch, int n) {
 	return randomArr;
 }
 
-char* CharArr::gen1DArr(int n) {
-	static char* ch = new char[n];
+char** CharArr::gen2DArr(int row, int col, int n) {
+	char* ch = new char[n];
 
 	srand(time(NULL));
 
 	randomCharArr(ch, n);
 
-	return randomSortArr(ch, n);
-}
+	ch = randomSortArr(ch, n);
 
-char** CharArr::gen2DArr(char* ch, int row, int col) {
 	char** gen2DArr;
+
 	gen2DArr = new char* [row];
 	for (int i = 0; i < row; i++) {
 		gen2DArr[i] = new char[col];

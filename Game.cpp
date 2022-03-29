@@ -7,7 +7,7 @@ Game::Game(int n) {
 	Common::consoleSetup();
 	charArr.row = n; 
 	charArr.col = n;
-	charArr.arr = charArr.gen2DArr(charArr.gen1DArr(charArr.row * charArr.col), charArr.row, charArr.col);
+	charArr.arr = charArr.gen2DArr(charArr.row, charArr.col, n * n);
 	gameX = centerX - (n - 4);
 	gameOutput(charArr.row, charArr.col);
 }
