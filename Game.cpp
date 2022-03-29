@@ -1,5 +1,5 @@
 #include "Game.h"
-const string Game::gameBtnList[3] = { "BACK TO MENU: B", "PAUSE: P", "MUSIC: M" };
+const string Game::gameBtnList[3] = { "BACK TO MENU: B", "PAUSE: P" };
 const string Game::menuBackList[2] = { "YES", "NO" };
 const string Game::pauseList[3] = { "RESUME", "REPLAY", "BACK TO MENU" };
 
@@ -159,12 +159,9 @@ void Game::inputProcess(int row, int col) {
 		case 7: //P
 			pauseScreen();
 			break;
-
 		}
 		if (chCnt == row * col) {
-			selectColor(x, y, BLACK, WHITE, sltRow, sltCol);
-			Common::goTo(gameX + distX * col, gameY + distY * row);
-			cout << "CONGRATS" << endl;
+			Menu::menuDoneOutput();
 		}
 	} while (true);
 }
@@ -194,25 +191,30 @@ bool Game::matchCheck(int preRow, int preCol, int postRow, int postCol) {
 
 bool Game::checkIMatch(int preRow, int preCol, int postRow, int postCol) {
 	int check = 1;
-	if (preRow == postRow) {
-		int row = preRow;
-		if (preCol > postCol) {
-			swap(preCol, postCol);
-		}
-		for (int j = preCol + 1; j < postCol; j++) {
-			if (charArr.arr[row][j] != ' ') {
+	if (preRow > postRow) {
+		swap(preRow, postRow);
+		swap(preCol, postCol);
+	}
+	if (preCol == postCol) {
+		for (int i = preRow + 1; i < postRow; i++) {
+			if (charArr.arr[i][preCol] != ' ') {
 				check = 0;
 			}
 		}
 	}
-	else if (preCol == postCol) {
-		int col = preCol;
-		if (preRow > postRow) {
-			swap(preRow, postRow);
+	if (preRow == postRow) {
+		if (preCol < postCol) {
+			for (int i = preCol + 1; i < postCol; i++) {
+				if (charArr.arr[preRow][i] != ' ') {
+					check = 0;
+				}
+			}
 		}
-		for (int i = preRow + 1; i < postRow; i++) {
-			if (charArr.arr[i][col] != ' ') {
-				check = 0;
+		else {
+			for (int i = postCol +1; i < preCol; i++) {
+				if (charArr.arr[preRow][i] != ' ') {
+					check = 0;
+				}
 			}
 		}
 	}
@@ -312,7 +314,7 @@ bool Game::checkUMatch(int preRow, int preCol, int postRow, int postCol) {
 			}
 		}
 		if (check == 0) {
-			if (checkIMatch(preRow, preCol, preRow, charArr.col - 1) && charArr.arr[preRow][charArr.col - 1]) {
+			if (checkIMatch(preRow, preCol, preRow, charArr.col - 1) && charArr.arr[preRow][charArr.col - 1] == ' ') {
 				return 1;
 			}
 		}
@@ -347,7 +349,7 @@ bool Game::checkUMatch(int preRow, int preCol, int postRow, int postCol) {
 			}
 		}
 		if (check == 0) {
-			if (checkIMatch(postRow, postCol, postRow, charArr.col - 1) && charArr.arr[postRow][charArr.col - 1]) {
+			if (checkIMatch(postRow, postCol, postRow, charArr.col - 1) && charArr.arr[postRow][charArr.col - 1] == ' ') {
 				return 1;
 			}
 		}

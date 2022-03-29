@@ -10,6 +10,7 @@ using namespace std;
 struct Menu {
 	const static string menuList[4];
 	const static string playList[4];
+	const static string doneList[3];
 
 	Menu();
 	static void titleOutput();
@@ -19,4 +20,6 @@ struct Menu {
 	static void menuPlayInput();
 	static void menuTutorial();
 	static void menuAbout();
+	static void menuDoneOutput();
+	static void menuDoneInput();
 };

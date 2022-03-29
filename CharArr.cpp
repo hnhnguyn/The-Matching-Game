@@ -2,8 +2,7 @@
 #include <ctime>
 #include "CharArr.h"
 
-//create random array including couples of characters
-void randomCharArr(char*& ch, int n) {
+void CharArr::randomCharArr(char*& ch, int n) {
 	ch = new char[n];
 	int* check = new int[26];
 	for (int i = 0; i < 26; i++) {
@@ -23,8 +22,7 @@ void randomCharArr(char*& ch, int n) {
 	}
 }
 
-//sort array randomly
-char* randomSortArr(char*& ch, int n) {
+char* CharArr::randomSortArr(char*& ch, int n) {
 	int position[100];
 	bool check[100];
 	memset(check, 0, sizeof(check));
@@ -44,13 +42,17 @@ char* randomSortArr(char*& ch, int n) {
 }
 
 char* CharArr::gen1DArr(int n) {
-	char* ch = new char[n];
+	static char* ch = new char[n];
 
-	srand(time(NULL));
+	/*srand(time(NULL));
 
-	randomCharArr(ch, n);
+	randomCharArr(ch, n);*/
 
-	return randomSortArr(ch, n);
+	for (int i = 0; i < n; i++) {
+		*(ch + i) = 'A';
+	}
+
+	return ch;
 }
 
 char** CharArr::gen2DArr(char* ch, int row, int col) {
