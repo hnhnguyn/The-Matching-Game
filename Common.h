@@ -4,8 +4,6 @@
 #include <conio.h>
 #include <string>
 #include "Menu.h"
-#include "CharArr.h"
-#include "Game.h"
 using namespace std;
 
 #define BLACK 0
@@ -24,14 +22,16 @@ using namespace std;
 #define LIGHT_PURPLE 13
 #define LIGHT_YELLOW 14
 #define BRIGHT_WHITE 15
+#define size 8
 #define distX 4
-#define distY 2
 #define centerX 50
+#define btnX 30
+#define distY 2
 #define menuY 15
 #define playY 5
 #define exitY 3
 #define ansY 5
-#define btnX 30
+#define resultY 8
 #define btnY 2
 #define gameY 10
 #define botY 17

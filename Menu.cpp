@@ -1,7 +1,7 @@
 #include "Menu.h"
 
 const string Menu::menuList[4] = { "PLAY", "TUTORIAL", "ABOUT", "EXIT" };
-const string Menu::playList[4] = { "EASY", "MEDIUM", "HARD", "BACK TO MENU" };
+const string Menu::playList[3] = { "STANDARD", "DIFFICULT", "BACK TO MENU" };
 const string Menu::doneList[2] = { "NEW GAME", "BACK TO MENU" };
 
 Menu::Menu() {
@@ -121,15 +121,12 @@ void Menu::menuPlayInput() {
 			break;
 		case 5:
 			if (slti == 0) {
-				Game::Game(4);
+				GameStandard::GameStandard();
 			}
 			else if (slti == 1) {
-				Game::Game(6);
+				
 			}
 			else if (slti == 2) {
-				Game::Game(8);
-			}
-			else if (slti == 3) {
 				menuOutput();
 			}
 			break;
@@ -171,8 +168,15 @@ void Menu::menuAbout() {
 	Common::exitOutput(1);
 }
 
-void Menu::menuDoneOutput() {
+void Menu::menuDoneOutput(int duration, int couples) {
 	system("cls");
+	int point = couples * 50 + duration;
+	Common::goTo(centerX, resultY);
+	cout << "ALL MATCHED";
+	Common:: goTo(centerX, resultY + distY);
+	cout << point;
+	Common::goTo(centerX, resultY + 2* distY);
+	cout << "STANDARD MODE";
 	Common::goTo(centerX, playY);
 	for (int i = 0; i < sizeof(doneList) / sizeof(doneList[0]); i++) {
 		int x = centerX;

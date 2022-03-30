@@ -4,12 +4,12 @@
 #include <conio.h>
 #include <string>
 #include "Common.h"
-#include "Game.h"
+#include "GameStandard.h"
 using namespace std;
 
 struct Menu {
 	const static string menuList[4];
-	const static string playList[4];
+	const static string playList[3];
 	const static string doneList[2];
 
 	Menu();
@@ -20,6 +20,6 @@ struct Menu {
 	static void menuPlayInput();
 	static void menuTutorial();
 	static void menuAbout();
-	static void menuDoneOutput();
+	static void menuDoneOutput(int, int);
 	static void menuDoneInput();
 };

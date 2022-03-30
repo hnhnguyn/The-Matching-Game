@@ -4,7 +4,7 @@
 
 void CharArr::randomCharArr(char*& ch, int n) {
 	ch = new char[n];
-	int* check = new int[26];
+	int check[26];
 	for (int i = 0; i < 26; i++) {
 		check[i] = 0;
 	}
@@ -22,10 +22,12 @@ void CharArr::randomCharArr(char*& ch, int n) {
 	}
 }
 
-char* CharArr::randomSortArr(char*& ch, int n) {
-	int position[100];
-	bool check[100];
-	memset(check, 0, sizeof(check));
+void CharArr::randomSortArr(char*& ch, int n) {
+	int* position = new int[n];
+	bool* check = new bool[n];
+	for (int i = 0; i < n; i++) {
+		*(check + i) = 0;
+	}
 	for (int i = 0; i < n; i++) {
 		int tmp;
 		do {
@@ -34,21 +36,27 @@ char* CharArr::randomSortArr(char*& ch, int n) {
 		position[i] = tmp;
 		check[tmp] = 1;
 	}
-	static char randomArr[100];
+	char* randomArr = new char[n];
 	for (int i = 0; i < n; i++) {
 		randomArr[position[i]] = ch[i];
 	}
-	return randomArr;
+	for (int i = 0; i < n; i++) {
+		*(ch + i) = *(randomArr + i);
+	}
+
+	delete[] check;
+	delete[] position;
+	delete[] randomArr;
 }
 
 char** CharArr::gen2DArr(int row, int col, int n) {
-	char* ch = new char[n];
+	char* ch;
 
-	srand(time(NULL));
+	srand((int)time(NULL));
 
 	randomCharArr(ch, n);
 
-	ch = randomSortArr(ch, n);
+	randomSortArr(ch, n);
 
 	char** gen2DArr;
 
@@ -63,5 +71,6 @@ char** CharArr::gen2DArr(int row, int col, int n) {
 		}
 	}
 
+	delete[] ch;
 	return gen2DArr;
 }

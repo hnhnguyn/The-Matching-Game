@@ -1,27 +1,31 @@
-#include "Game.h"
-const string Game::gameBtnList[3] = { "BACK TO MENU: B", "PAUSE: P" };
-const string Game::menuBackList[2] = { "YES", "NO" };
-const string Game::pauseList[3] = { "RESUME", "REPLAY", "BACK TO MENU" };
+#include "GameStandard.h"
+const string GameStandard::gameBtnList[3] = { "BACK TO MENU: B", "PAUSE: P" };
+const string GameStandard::menuBackList[2] = { "YES", "NO" };
+const string GameStandard::pauseList[3] = { "RESUME", "REPLAY", "BACK TO MENU" };
 
-Game::Game(int n) {
+GameStandard::GameStandard() {
 	Common::consoleSetup();
-	charArr.row = n; 
-	charArr.col = n;
-	charArr.arr = charArr.gen2DArr(charArr.row, charArr.col, n * n);
-	gameX = centerX - (n - 4);
+	charArr.row = size; 
+	charArr.col = size;
+	charArr.arr = charArr.gen2DArr(charArr.row, charArr.col, size * size);
+	chCnt = 0;
+	time_taken = 0;
+	gameX = centerX - size / 2;
+	time = 180;
 	gameOutput(charArr.row, charArr.col);
 }
 
 
-void Game::selectColor(int x, int y, int background, int text, int i, int j) {
+void GameStandard::selectColor(int x, int y, int background, int text, int i, int j) {
 	Common::goTo(x, y);
 	Common::setColor(background, text);
 	cout << " " << charArr.arr[i][j] << " ";
 	Common::setColor(BLACK, WHITE);
 }
 
-void Game::gameOutput(int row, int col) {
+void GameStandard::gameOutput(int row, int col) {
 	system("cls");
+	start = clock();
 	for (int i = 0; i < sizeof(gameBtnList) / sizeof(gameBtnList[0]); i++) {
 		int x = btnX;
 		int y = btnY + distY * i;
@@ -46,13 +50,12 @@ void Game::gameOutput(int row, int col) {
 	inputProcess(charArr.row, charArr.col);
 }
 
-void Game::inputProcess(int row, int col) {
+void GameStandard::inputProcess(int row, int col) {
 	int sltRow = 0, sltCol = 0;
 	int input = -1;
 	int x = gameX + distX * sltRow;
 	int y = gameY + distY * sltCol;
 	int sltedX = -1, sltedY = -1, sltedRow = -1, sltedCol = -1, sltCnt = 0;
-	int chCnt = 0;
 	do {
 		input = Common::getInput();
 		switch (input) {
@@ -64,7 +67,6 @@ void Game::inputProcess(int row, int col) {
 				}
 				else {
 					cout << " " << charArr.arr[sltRow][sltCol] << " ";
-					
 				}
 				sltCol--;
 				x -= distX;
@@ -79,7 +81,6 @@ void Game::inputProcess(int row, int col) {
 				}
 				else {
 					cout << " " << charArr.arr[sltRow][sltCol] << " ";
-
 				}
 				sltRow--;
 				y -= distY;
@@ -95,7 +96,6 @@ void Game::inputProcess(int row, int col) {
 				}
 				else {
 					cout << " " << charArr.arr[sltRow][sltCol] << " ";
-
 				}
 				sltRow++;
 				y += distY;
@@ -110,14 +110,13 @@ void Game::inputProcess(int row, int col) {
 				}
 				else {
 					cout << " " << charArr.arr[sltRow][sltCol] << " ";
-
 				}
 				sltCol++;
 				x += distX;
 				selectColor(x, y, BRIGHT_WHITE, BLACK, sltRow, sltCol);
 			}
 			break;
-		case 5: //SPACE / ENTER
+		case 5: //ENTER
 			if(charArr.arr[sltRow][sltCol] != ' ') {
 				if (sltedRow == sltRow && sltedCol == sltCol) {
 					Common::goTo(x, y);
@@ -135,7 +134,7 @@ void Game::inputProcess(int row, int col) {
 						sltedCol = sltCol;
 					}
 					else if (sltCnt == 2) {
-						if (Game::matchCheck(sltedRow, sltedCol, sltRow, sltCol)) {
+						if (GameStandard::matchCheck(sltedRow, sltedCol, sltRow, sltCol)) {
 							charArr.arr[sltedRow][sltedCol] = ' ';
 							selectColor(sltedX, sltedY, BLACK, WHITE, sltedRow, sltedCol);
 							charArr.arr[sltRow][sltCol] = ' ';
@@ -154,20 +153,24 @@ void Game::inputProcess(int row, int col) {
 			}
 			break;
 		case 6: //B
-			menuBackScreen();
+			Menu::menuOutput();
 			break;
 		case 7: //P
+			end = clock();
+			time_taken += int(end - start) / int(CLOCKS_PER_SEC);
 			pauseScreen();
 			break;
 		}
 		if (chCnt == row * col) {
-			Menu::menuDoneOutput();
+			end = clock();
+			time_taken += int(end - start) / int(CLOCKS_PER_SEC);
+			Menu::menuDoneOutput(time - time_taken, chCnt / 2);
 		}
 	} while (input != 0);
-	Game::pauseScreen();
+	GameStandard::pauseScreen();
 }
 
-bool Game::matchCheck(int preRow, int preCol, int postRow, int postCol) {
+bool GameStandard::matchCheck(int preRow, int preCol, int postRow, int postCol) {
 	if (charArr.arr[preRow][preCol] == charArr.arr[postRow][postCol]) {
 		if (preRow == postRow || preCol == postCol) {
 			if (checkIMatch(preRow, preCol, postRow, postCol)) {
@@ -190,7 +193,7 @@ bool Game::matchCheck(int preRow, int preCol, int postRow, int postCol) {
 	}
 }
 
-bool Game::checkIMatch(int preRow, int preCol, int postRow, int postCol) {
+bool GameStandard::checkIMatch(int preRow, int preCol, int postRow, int postCol) {
 	int check = 1;
 	if (preRow > postRow) {
 		swap(preRow, postRow);
@@ -222,7 +225,7 @@ bool Game::checkIMatch(int preRow, int preCol, int postRow, int postCol) {
 	return check;
 }
 
-bool Game::checkLMatch(int preRow, int preCol, int postRow, int postCol) {
+bool GameStandard::checkLMatch(int preRow, int preCol, int postRow, int postCol) {
 	if (preRow > postRow) {
 		swap(preRow, postRow);
 		swap(preCol, postCol);
@@ -236,7 +239,7 @@ bool Game::checkLMatch(int preRow, int preCol, int postRow, int postCol) {
 	return 0;
 }
 
-bool Game::checkUMatch(int preRow, int preCol, int postRow, int postCol) {
+bool GameStandard::checkUMatch(int preRow, int preCol, int postRow, int postCol) {
 	if (preCol == postCol) {
 		if (preCol == 0 || preCol == charArr.col - 1) {
 			return 1;
@@ -358,7 +361,7 @@ bool Game::checkUMatch(int preRow, int preCol, int postRow, int postCol) {
 	return 0;
 }
 
-bool Game::checkZMatch(int preRow, int preCol, int postRow, int postCol) {
+bool GameStandard::checkZMatch(int preRow, int preCol, int postRow, int postCol) {
 	if (preRow > postRow) {
 		swap(preRow, postRow);
 		swap(preCol, postCol);
@@ -385,63 +388,7 @@ bool Game::checkZMatch(int preRow, int preCol, int postRow, int postCol) {
 	return 0;
 }
 
-
-void Game::menuBackScreen() {
-	system("cls");
-	Common::goTo(centerX, exitY);
-	cout << "DO YOU WANT TO GO BACK TO MENU?";
-	int x = centerX;
-	int y = ansY;
-	Common::goTo(x, y);
-	cout << "> " << menuBackList[0];
-	y += distY;
-	Common::goTo(x, y);
-	cout << menuBackList[1];
-	menuBackInput();
-}
-
-void Game::menuBackInput() {
-	int slti = 0;
-	int input = -1;
-	int x = centerX;
-	int y = ansY;
-	do {
-		input = Common::getInput();
-		switch (input) {
-		case 3:
-			if (slti == 0) {
-				Common::goTo(x, y);
-				cout << menuBackList[0] << "  ";
-				y += distY;
-				slti++;
-				Common::goTo(x, y);
-				cout << "> " << menuBackList[1];
-			}
-			break;
-		case 2:
-			if (slti == 1) {
-				Common::goTo(x, y);
-				cout << menuBackList[1] << "  ";
-				y -= distY;
-				slti--;
-				Common::goTo(x, y);
-				cout << "> " << menuBackList[0];
-			}
-			break;
-		case 5:
-			if (slti == 0) {
-				input = 0;
-			}
-			else {
-				Game::gameOutput(charArr.row, charArr.col);
-			}
-			break;
-		}
-	} while (input != 0);
-	Menu::Menu();
-}
-
-void Game::pauseScreen() {
+void GameStandard::pauseScreen() {
 	system("cls");
 	for (int i = 0; i < sizeof(pauseList) / sizeof(pauseList[0]); i++) {
 		int x = centerX;
@@ -455,7 +402,7 @@ void Game::pauseScreen() {
 	pauseInput();
 }
 
-void Game::pauseInput() {
+void GameStandard::pauseInput() {
 	int slti = 0;
 	int input = -1;
 	int x = centerX;

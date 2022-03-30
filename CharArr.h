@@ -6,6 +6,6 @@ struct CharArr {
 	int col;
 
 	static void randomCharArr(char*&, int);
-	static char* randomSortArr(char*&, int);
+	static void randomSortArr(char*&, int);
 	static char** gen2DArr(int, int, int);
 };
