@@ -1,5 +1,5 @@
 #include "GameStandard.h"
-const string GameStandard::gameBtnList[3] = { "BACK TO MENU: B", "PAUSE: P" };
+const string GameStandard::gameBtnList[4] = { "BACK TO MENU: B", "PAUSE: P", "HINT: H"};
 const string GameStandard::menuBackList[2] = { "YES", "NO" };
 const string GameStandard::pauseList[3] = { "RESUME", "REPLAY", "BACK TO MENU" };
 
@@ -218,6 +218,11 @@ void GameStandard::inputProcess() {
 			break;
 		case 7: //P
 			pauseScreen();
+			break;
+		case 8:
+			Common::goTo(0, 0);
+			cout << sg.preRow << ", " << sg.preCol << endl;
+			cout << sg.postRow << ", " << sg.postCol << endl;
 			break;
 		}
 		if (chCnt == size * size) {

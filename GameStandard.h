@@ -18,7 +18,7 @@ struct suggest {
 
 struct GameStandard {
 	CharArr charArr;
-	const static string gameBtnList[3];
+	const static string gameBtnList[4];
 	const static string menuBackList[2];
 	const static string pauseList[3];
 	suggest sg;

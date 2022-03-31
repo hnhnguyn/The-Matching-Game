@@ -53,8 +53,10 @@ int Common::getInput() {
 		return 6;
 	case 80: case 112: //P
 		return 7;
-	case 77: case 109: //M
+	case 72: case 104: //H
 		return 8;
+	case 77: case 109: //M
+		return 9;
 	default:
 		return -1;
 	}
