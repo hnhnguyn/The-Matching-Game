@@ -114,6 +114,7 @@ void GameStandard::inputProcess() {
 	int x = gameX + distX * sltRow;
 	int y = gameY + distY * sltCol;
 	int sltedX = -1, sltedY = -1, sltedRow = -1, sltedCol = -1, sltCnt = 0;
+	int hint = 0;
 	do {
 		if (!checkMove()) {
 			gameOutput();
@@ -200,7 +201,14 @@ void GameStandard::inputProcess() {
 							selectColor(sltedX, sltedY, BLACK, WHITE, sltedRow, sltedCol);
 							charArr.arr[sltRow][sltCol] = ' ';
 							selectColor(x, y, BRIGHT_WHITE, BLACK, sltRow, sltCol);
-							chCnt += 2;
+							chCnt += 2; 
+							if (hint == 1) {
+								hint = 0;
+								Common::goTo(0, 0);
+								cout << " " << endl;
+								cout << "    " << endl;
+								cout << "    " << endl;
+							}
 						}
 						else {
 							selectColor(sltedX, sltedY, BLACK, WHITE, sltedRow, sltedCol);
@@ -219,8 +227,10 @@ void GameStandard::inputProcess() {
 		case 7: //P
 			pauseScreen();
 			break;
-		case 8:
+		case 8: //H
+			hint++;
 			Common::goTo(0, 0);
+			cout << sg.ch << endl;
 			cout << sg.preRow << ", " << sg.preCol << endl;
 			cout << sg.postRow << ", " << sg.postCol << endl;
 			break;
