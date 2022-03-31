@@ -202,19 +202,19 @@ void GameStandard::inputProcess() {
 							charArr.arr[sltRow][sltCol] = ' ';
 							selectColor(x, y, BRIGHT_WHITE, BLACK, sltRow, sltCol);
 							chCnt += 2; 
-							if (hint == 1) {
-								hint = 0;
-								Common::goTo(0, 0);
-								cout << " " << endl;
-								cout << "    " << endl;
-								cout << "    " << endl;
-							}
 						}
 						else {
 							selectColor(sltedX, sltedY, BLACK, WHITE, sltedRow, sltedCol);
 							sltedX = -1;
 							sltedY = -1;
 							Common::goTo(x, y);
+						}
+						if (hint == 1) {
+							hint = 0;
+							Common::goTo(0, 0);
+							cout << " " << endl;
+							cout << "    " << endl;
+							cout << "    " << endl;
 						}
 						sltCnt = 0;
 					}
