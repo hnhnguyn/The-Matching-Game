@@ -20,6 +20,6 @@ struct Menu {
 	static void menuPlayInput();
 	static void menuTutorial();
 	static void menuAbout();
-	static void menuDoneOutput(int, int);
+	static void menuDoneOutput();
 	static void menuDoneInput();
 };

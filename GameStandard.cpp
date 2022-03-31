@@ -5,16 +5,13 @@ const string GameStandard::pauseList[3] = { "RESUME", "REPLAY", "BACK TO MENU" }
 
 GameStandard::GameStandard() {
 	Common::consoleSetup();
-	charArr.row = size; 
-	charArr.col = size;
-	charArr.arr = charArr.gen2DArr(charArr.row, charArr.col, size * size);
+	charArr.arr = charArr.gen2DArr(size, size, size * size);
 	chCnt = 0;
 	time_taken = 0;
 	gameX = centerX - size / 2;
 	time = 180;
-	gameOutput(charArr.row, charArr.col);
+	gameOutput();
 }
-
 
 void GameStandard::selectColor(int x, int y, int background, int text, int i, int j) {
 	Common::goTo(x, y);
@@ -23,17 +20,78 @@ void GameStandard::selectColor(int x, int y, int background, int text, int i, in
 	Common::setColor(BLACK, WHITE);
 }
 
-void GameStandard::gameOutput(int row, int col) {
+bool GameStandard::checkMove() {
+	char c;
+	for (int i = 0; i < size * size; i++) {
+		if (charArr.arr[i / size][i % size] != ' ') {
+			c = charArr.arr[i / size][i % size];
+		}
+		else {
+			continue;
+		}
+		for (int j = i + 1; j < size * size; j++) {
+			if (charArr.arr[j / size][j % size] == c) {
+				if (matchCheck(i / size, i % size, j / size, j % size)) {
+					sg.ch = c;
+					sg.preRow = i / size;
+					sg.preCol = i % size;
+					sg.postRow = j / size;
+					sg.postCol = j % size;
+					return 1;
+				}
+			}
+		}
+	}
+	return 0;
+}
+
+void GameStandard::shuffle() {
+	bool* check = new bool[size * size];
+	for (int i = 0; i < size * size; i++) {
+		check[i] = 0;
+	}
+	int* position = new int[size * size];
+	for (int i = 0; i < size * size; i++) {
+		int tmp;
+		do {
+			tmp = rand() % (size * size);
+		} while (check[tmp]);
+		check[tmp] = 1;
+		position[i] = tmp;
+	}
+	char** tmpCh;
+	tmpCh = new char* [size];
+	for (int i = 0; i < size; i++) {
+		tmpCh[i] = new char [size];
+	}
+	for (int i = 0; i < size * size; i++) {
+		tmpCh[position[i] / size][position[i] % size] = charArr.arr[i / size][i % size];
+	}
+	for (int i = 0; i < size * size; i++) {
+		charArr.arr[i / size][i % size] = tmpCh[i / size][i % size];
+	}
+
+	delete[] check;
+	delete[] position;
+	for (int i = 0; i < size; i++) {
+		delete[] tmpCh[i];
+	}
+	delete[] tmpCh;
+}
+
+void GameStandard::gameOutput() {
 	system("cls");
-	start = clock();
+	while (!checkMove()) {
+		shuffle();
+	}
 	for (int i = 0; i < sizeof(gameBtnList) / sizeof(gameBtnList[0]); i++) {
 		int x = btnX;
 		int y = btnY + distY * i;
 		Common::goTo(x, y);
 		cout << gameBtnList[i];
 	}
-	for (int i = 0; i < row; i++) {
-		for (int j = 0; j < col; j++) {
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
 			int x = gameX + distX * j;
 			int y = gameY + distY * i;
 			Common::goTo(x, y);
@@ -47,16 +105,19 @@ void GameStandard::gameOutput(int row, int col) {
 			}
 		}
 	}
-	inputProcess(charArr.row, charArr.col);
+	inputProcess();
 }
 
-void GameStandard::inputProcess(int row, int col) {
+void GameStandard::inputProcess() {
 	int sltRow = 0, sltCol = 0;
 	int input = -1;
 	int x = gameX + distX * sltRow;
 	int y = gameY + distY * sltCol;
 	int sltedX = -1, sltedY = -1, sltedRow = -1, sltedCol = -1, sltCnt = 0;
 	do {
+		if (!checkMove()) {
+			gameOutput();
+		}
 		input = Common::getInput();
 		switch (input) {
 		case 1: //LEFT
@@ -89,7 +150,7 @@ void GameStandard::inputProcess(int row, int col) {
 			}
 			break;
 		case 3: //DOWN
-			if (sltRow != row - 1) {
+			if (sltRow != size - 1) {
 				Common::goTo(x, y);
 				if (sltCnt == 1 && x == sltedX && y == sltedY) {
 					selectColor(x, y, LIGHT_AQUA, BLACK, sltRow, sltCol);
@@ -103,7 +164,7 @@ void GameStandard::inputProcess(int row, int col) {
 			}
 			break;
 		case 4: //RIGHT
-			if (sltCol != col - 1) {
+			if (sltCol != size - 1) {
 				Common::goTo(x, y);
 				if (sltCnt == 1 && x == sltedX && y == sltedY) {
 					selectColor(x, y, LIGHT_AQUA, BLACK, sltRow, sltCol);
@@ -156,15 +217,11 @@ void GameStandard::inputProcess(int row, int col) {
 			Menu::menuOutput();
 			break;
 		case 7: //P
-			end = clock();
-			time_taken += int(end - start) / int(CLOCKS_PER_SEC);
 			pauseScreen();
 			break;
 		}
-		if (chCnt == row * col) {
-			end = clock();
-			time_taken += int(end - start) / int(CLOCKS_PER_SEC);
-			Menu::menuDoneOutput(time - time_taken, chCnt / 2);
+		if (chCnt == size * size) {
+			Menu::menuDoneOutput();
 		}
 	} while (input != 0);
 	GameStandard::pauseScreen();
@@ -241,12 +298,12 @@ bool GameStandard::checkLMatch(int preRow, int preCol, int postRow, int postCol)
 
 bool GameStandard::checkUMatch(int preRow, int preCol, int postRow, int postCol) {
 	if (preCol == postCol) {
-		if (preCol == 0 || preCol == charArr.col - 1) {
+		if (preCol == 0 || preCol == size - 1) {
 			return 1;
 		}
 	}
 	if (preRow == postRow) {
-		if (preRow == 0 || preRow == charArr.row - 1) {
+		if (preRow == 0 || preRow == size - 1) {
 			return 1;
 		}
 	} else if (preRow > postRow) {
@@ -271,19 +328,19 @@ bool GameStandard::checkUMatch(int preRow, int preCol, int postRow, int postCol)
 		}
 	}
 	check = 0;
-	for (int i = postRow; i < charArr.row - 1; i++) {
+	for (int i = postRow; i < size - 1; i++) {
 		check++;
 		if (checkIMatch(preRow, preCol, i + 1, preCol) && charArr.arr[i + 1][preCol] == ' ' && checkLMatch(i + 1, preCol, postRow, postCol)) {
 			return 1;
 		}
-		if (i == charArr.row - 2) {
+		if (i == size - 2) {
 			if (checkIMatch(preRow, preCol, i + 1, preCol) && charArr.arr[i + 1][preCol] == ' ' && checkIMatch(i + 1, postCol, postRow, postCol) && charArr.arr[i + 1][postCol] == ' ') {
 				return 1;
 			}
 		}
 	}
 	if (check == 0) {
-		if (checkIMatch(preRow, preCol, charArr.row - 1, preCol) && charArr.arr[charArr.row - 1][preCol] == ' ') {
+		if (checkIMatch(preRow, preCol, size - 1, preCol) && charArr.arr[size - 1][preCol] == ' ') {
 			return 1;
 		}
 	}
@@ -306,19 +363,19 @@ bool GameStandard::checkUMatch(int preRow, int preCol, int postRow, int postCol)
 			}
 		}
 		check = 0;
-		for (int i = postCol + 1; i < charArr.col; i++) {
+		for (int i = postCol + 1; i < size; i++) {
 			check++;
 			if (checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ' && checkLMatch(preRow, i, postRow, postCol)) {
 				return 1;
 			}
-			if (i == charArr.col - 1) {
+			if (i == size - 1) {
 				if (checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ' && checkIMatch(postRow, postCol, postRow, i) && charArr.arr[postRow][i] == ' ') {
 					return 1;
 				}
 			}
 		}
 		if (check == 0) {
-			if (checkIMatch(preRow, preCol, preRow, charArr.col - 1) && charArr.arr[preRow][charArr.col - 1] == ' ') {
+			if (checkIMatch(preRow, preCol, preRow, size - 1) && charArr.arr[preRow][size - 1] == ' ') {
 				return 1;
 			}
 		}
@@ -341,19 +398,19 @@ bool GameStandard::checkUMatch(int preRow, int preCol, int postRow, int postCol)
 			}
 		}
 		check = 0;
-		for (int i = preCol + 1; i < charArr.col; i++) {
+		for (int i = preCol + 1; i < size; i++) {
 			check++;
 			if (checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ' && checkLMatch(preRow, i, postRow, postCol)) {
 				return 1;
 			}
-			if (i == charArr.col - 1) {
+			if (i == size - 1) {
 				if (checkIMatch(postRow, postCol, postRow, i) && charArr.arr[postRow][i] == ' ' && checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ') {
 					return 1;
 				}
 			}
 		}
 		if (check == 0) {
-			if (checkIMatch(postRow, postCol, postRow, charArr.col - 1) && charArr.arr[postRow][charArr.col - 1] == ' ') {
+			if (checkIMatch(postRow, postCol, postRow, size - 1) && charArr.arr[postRow][size - 1] == ' ') {
 				return 1;
 			}
 		}
@@ -432,7 +489,7 @@ void GameStandard::pauseInput() {
 			break;
 		case 5:
 			if (slti == 0) {
-				gameOutput(charArr.row, charArr.col);
+				gameOutput();
 			}
 			else if (slti == 1) {
 				Menu::menuPlayOutput();

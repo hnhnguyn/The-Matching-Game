@@ -16,6 +16,12 @@ void CharArr::randomCharArr(char*& ch, int n) {
 			} while (check[tmp]);
 			check[tmp] = 1;
 		}
+		else {
+			do {
+				tmp = rand() % 26;
+			} while (check[tmp] == 2);
+			check[tmp]++;
+		}
 		char value = tmp + 'A';
 		ch[i] = value;
 		ch[i + 1] = value;

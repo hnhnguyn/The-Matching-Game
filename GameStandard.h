@@ -8,11 +8,20 @@
 #include "Menu.h"
 using namespace std;
 
+struct suggest {
+	char ch;
+	int preRow;
+	int preCol;
+	int postRow;
+	int postCol;
+};
+
 struct GameStandard {
 	CharArr charArr;
 	const static string gameBtnList[3];
 	const static string menuBackList[2];
 	const static string pauseList[3];
+	suggest sg;
 	int gameX;
 	int chCnt;
 	int time;
@@ -20,10 +29,11 @@ struct GameStandard {
 	clock_t start, end;
 
 	GameStandard();
-	int timeSet(int);
-	void gameOutput(int, int);
+	void gameOutput();
 	void selectColor(int, int, int, int, int, int);
-	void inputProcess(int, int);
+	bool checkMove();
+	void shuffle();
+	void inputProcess();
 	bool checkIMatch(int, int, int, int);
 	bool checkLMatch(int, int, int, int);
 	bool checkUMatch(int, int, int, int);

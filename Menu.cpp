@@ -168,14 +168,11 @@ void Menu::menuAbout() {
 	Common::exitOutput(1);
 }
 
-void Menu::menuDoneOutput(int duration, int couples) {
+void Menu::menuDoneOutput() {
 	system("cls");
-	int point = couples * 50 + duration;
 	Common::goTo(centerX, resultY);
 	cout << "ALL MATCHED";
-	Common:: goTo(centerX, resultY + distY);
-	cout << point;
-	Common::goTo(centerX, resultY + 2* distY);
+	Common::goTo(centerX, resultY + distY);
 	cout << "STANDARD MODE";
 	Common::goTo(centerX, playY);
 	for (int i = 0; i < sizeof(doneList) / sizeof(doneList[0]); i++) {
