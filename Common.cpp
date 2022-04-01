@@ -8,7 +8,7 @@ void Common::consoleSetup() {
 	setWindowSize(300, 300);
 	disableResizeWindow();
 	disableMaxButton();
-	hideScrollBars();
+	hideScrollBars(); 
 }
 
 void Common::goTo(SHORT posX, SHORT posY) {

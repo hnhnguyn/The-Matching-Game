@@ -9,7 +9,6 @@ GameStandard::GameStandard() {
 	chCnt = 0;
 	time_taken = 0;
 	gameX = centerX - size / 2;
-	time = 180;
 	gameOutput();
 }
 
@@ -115,8 +114,10 @@ void GameStandard::inputProcess() {
 	int y = gameY + distY * sltCol;
 	int sltedX = -1, sltedY = -1, sltedRow = -1, sltedCol = -1, sltCnt = 0;
 	int hint = 0;
+	time = clock();
 	do {
 		if (!checkMove()) {
+			time_taken += (clock() - time) / CLOCKS_PER_SEC;
 			gameOutput();
 		}
 		input = Common::getInput();
@@ -225,6 +226,7 @@ void GameStandard::inputProcess() {
 			Menu::menuOutput();
 			break;
 		case 7: //P
+			time_taken += (clock() - time) / (CLOCKS_PER_SEC);
 			pauseScreen();
 			break;
 		case 8: //H
@@ -236,7 +238,8 @@ void GameStandard::inputProcess() {
 			break;
 		}
 		if (chCnt == size * size) {
-			Menu::menuDoneOutput();
+			time_taken += (clock() - time) / (CLOCKS_PER_SEC);
+			Menu::menuDoneOutput(time_taken);
 		}
 	} while (input != 0);
 	GameStandard::pauseScreen();
