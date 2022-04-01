@@ -2,7 +2,9 @@
 #include <iostream>
 #include <windows.h>
 #include <conio.h>
+#include <iomanip>
 #include <string>
+#include <ctime>
 #include "Menu.h"
 using namespace std;
 

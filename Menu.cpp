@@ -168,12 +168,12 @@ void Menu::menuAbout() {
 	Common::exitOutput(1);
 }
 
-void Menu::menuDoneOutput() {
+void Menu::menuDoneOutput(int time) {
 	system("cls");
 	Common::goTo(centerX, resultY);
 	cout << "ALL MATCHED";
 	Common::goTo(centerX, resultY + distY);
-	cout << "STANDARD MODE";
+	cout << "YOUR TIME: " << time;
 	Common::goTo(centerX, playY);
 	for (int i = 0; i < sizeof(doneList) / sizeof(doneList[0]); i++) {
 		int x = centerX;

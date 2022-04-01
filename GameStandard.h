@@ -24,9 +24,8 @@ struct GameStandard {
 	suggest sg;
 	int gameX;
 	int chCnt;
-	int time;
+	clock_t time;
 	int time_taken;
-	clock_t start, end;
 
 	GameStandard();
 	void gameOutput();
