@@ -226,7 +226,7 @@ void GameStandard::inputProcess() {
 			Menu::menuOutput();
 			break;
 		case 7: //P
-			time_taken += (clock() - time) / (CLOCKS_PER_SEC);
+			time_taken += double(clock() - time / double(CLOCKS_PER_SEC)) / 1000;
 			pauseScreen();
 			break;
 		case 8: //H
@@ -238,7 +238,7 @@ void GameStandard::inputProcess() {
 			break;
 		}
 		if (chCnt == size * size) {
-			time_taken += (clock() - time) / (CLOCKS_PER_SEC);
+			time_taken += double(clock() - time / double(CLOCKS_PER_SEC)) / 1000;
 			Menu::menuDoneOutput(time_taken);
 		}
 	} while (input != 0);

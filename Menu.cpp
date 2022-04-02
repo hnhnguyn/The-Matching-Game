@@ -1,6 +1,6 @@
 #include "Menu.h"
 
-const string Menu::menuList[4] = { "PLAY", "TUTORIAL", "ABOUT", "EXIT" };
+const string Menu::menuList[5] = { "PLAY", "LEADERBOARD", "TUTORIAL", "ABOUT", "EXIT"};
 const string Menu::playList[3] = { "STANDARD", "DIFFICULT", "BACK TO MENU" };
 const string Menu::doneList[2] = { "NEW GAME", "BACK TO MENU" };
 
@@ -58,15 +58,17 @@ void Menu::menuInput() {
 			break;
 		case 5:
 			if (slti == 0) {
-				menuPlayOutput();
-			} 
+				menuGetName();
+			}
 			else if (slti == 1) {
+			}
+			else if (slti == 2) {
 				menuTutorial();
 			} 
-			else if (slti == 2) {
+			else if (slti == 3) {
 				menuAbout();
 			}
-			else if (slti == 3) {
+			else if (slti == 4) {
 				Common::exitOutput(0);
 				slti = 0;
 			}
@@ -74,6 +76,17 @@ void Menu::menuInput() {
 		}
 	} while (input != 0);
 	Common::exitOutput(0);
+}
+
+void Menu::menuGetName() {
+	system("cls");
+	Common::showCur(true);
+	string name;
+	Common::goTo(centerX, playY);
+	cout << "Enter your name: ";
+	cin >> name;
+	Common::showCur(false);
+	menuPlayOutput();
 }
 
 void Menu::menuPlayOutput() {
@@ -145,6 +158,7 @@ void Menu::menuTutorial() {
 		getline(in, tuto);
 		cout << tuto << endl;
 	}
+	in.close();
 	Common::goTo(centerX, botY);
 	cout << "> BACK TO MENU";
 	int input = -1;
@@ -168,6 +182,7 @@ void Menu::menuAbout() {
 		getline(in, line);
 		cout << line << endl;
 	}
+	in.close();
 	Common::goTo(centerX, botY);
 	cout << "> BACK TO MENU";
 	int input = -1;
@@ -182,12 +197,12 @@ void Menu::menuAbout() {
 	Common::exitOutput(1);
 }
 
-void Menu::menuDoneOutput(int time) {
+void Menu::menuDoneOutput(double time) {
 	system("cls");
 	Common::goTo(centerX, resultY);
 	cout << "ALL MATCHED";
 	Common::goTo(centerX, resultY + distY);
-	cout << "YOUR TIME: " << time;
+	cout << "YOUR TIME: " << setprecision(2) << fixed << time <<"s";
 	Common::goTo(centerX, playY);
 	for (int i = 0; i < sizeof(doneList) / sizeof(doneList[0]); i++) {
 		int x = centerX;

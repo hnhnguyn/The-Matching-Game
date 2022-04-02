@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="GameStandard.cpp" />
+    <ClCompile Include="Leaderboard.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="CharArr.cpp" />
@@ -149,7 +150,13 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="CharArr.h" />
     <ClInclude Include="GameStandard.h" />
+    <ClInclude Include="Leaderboard.h" />
     <ClInclude Include="Menu.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="about.txt" />
+    <Text Include="topPlayers.txt" />
+    <Text Include="tutorial.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

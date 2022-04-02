@@ -1,11 +1,8 @@
 #pragma once
-#include <iostream>
-#include <windows.h>
-#include <conio.h>
-#include <time.h>
-#include "common.h"
+#include "Common.h"
 #include "CharArr.h"
 #include "Menu.h"
+#include "Leaderboard.h"
 using namespace std;
 
 struct suggest {
@@ -25,7 +22,7 @@ struct GameStandard {
 	int gameX;
 	int chCnt;
 	clock_t time;
-	int time_taken;
+	double time_taken;
 
 	GameStandard();
 	void gameOutput();

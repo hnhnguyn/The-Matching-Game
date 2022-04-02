@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <windows.h>
 #include <conio.h>
 #include <iomanip>
@@ -32,6 +33,7 @@ using namespace std;
 #define distY 2
 #define menuY 15
 #define playY 5
+#define leaderboardY 5
 #define exitY 3
 #define ansY 5
 #define resultY 8
