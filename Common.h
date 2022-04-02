@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <fstream>
 #include <windows.h>
 #include <conio.h>
 #include <iomanip>
@@ -36,7 +37,7 @@ using namespace std;
 #define resultY 8
 #define btnY 2
 #define gameY 10
-#define botY 17
+#define botY 25
 
 struct Common {
 	const static string exitList[2];
