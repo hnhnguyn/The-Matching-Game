@@ -138,6 +138,13 @@ void Menu::menuPlayInput() {
 
 void Menu::menuTutorial() {
 	system("cls");
+	string tuto;
+	ifstream in;
+	in.open("tutorial.txt");
+	while (!in.eof()) {
+		getline(in, tuto);
+		cout << tuto << endl;
+	}
 	Common::goTo(centerX, botY);
 	cout << "> BACK TO MENU";
 	int input = -1;
@@ -154,6 +161,13 @@ void Menu::menuTutorial() {
 
 void Menu::menuAbout() {
 	system("cls");
+	ifstream in;
+	string line;
+	in.open("about.txt");
+	while (!in.eof()) {
+		getline(in, line);
+		cout << line << endl;
+	}
 	Common::goTo(centerX, botY);
 	cout << "> BACK TO MENU";
 	int input = -1;
