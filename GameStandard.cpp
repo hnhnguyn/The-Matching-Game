@@ -3,6 +3,7 @@ const string GameStandard::gameBtnList[4] = { "BACK TO MENU: B", "PAUSE: P", "HI
 const string GameStandard::menuBackList[2] = { "YES", "NO" };
 const string GameStandard::pauseList[3] = { "RESUME", "REPLAY", "BACK TO MENU" };
 
+
 GameStandard::GameStandard() {
 	Common::consoleSetup();
 	charArr.arr = charArr.gen2DArr(size, size, size * size);
