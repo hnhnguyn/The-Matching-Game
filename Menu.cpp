@@ -332,6 +332,9 @@ void Menu::topPlayCheck() {
 		}
 		ofstream out;
 		out.open("topPlayers.txt");
+		if (n >= 10) {
+			n = 9;
+		}
 		for (int i = 0; i <= n; i++) {
 			out << endl << players[i]._name << " " << players[i]._time;
 		}
