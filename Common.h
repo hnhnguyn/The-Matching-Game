@@ -1,4 +1,5 @@
 #pragma once
+#pragma comment(lib, "winmm.lib")
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -7,6 +8,7 @@
 #include <iomanip>
 #include <string>
 #include <ctime>
+#include "mmsystem.h"
 #include "Menu.h"
 using namespace std;
 
@@ -26,7 +28,7 @@ using namespace std;
 #define LIGHT_PURPLE 13
 #define LIGHT_YELLOW 14
 #define BRIGHT_WHITE 15
-#define size 8
+#define size 4
 #define distX 4
 #define centerX 50
 #define btnX 30
@@ -46,6 +48,8 @@ struct Common {
 
 	Common() {}
 	~Common() {}
+	static void selectsound();
+	static void matchedsound();
 	static void consoleSetup();
 	static void goTo(SHORT, SHORT);
 	static void setColor(int, int);

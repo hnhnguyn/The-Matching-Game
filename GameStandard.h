@@ -2,7 +2,6 @@
 #include "Common.h"
 #include "CharArr.h"
 #include "Menu.h"
-#include "Leaderboard.h"
 using namespace std;
 
 struct suggest {
@@ -25,6 +24,7 @@ struct GameStandard {
 	double time_taken;
 
 	GameStandard();
+	void Genboard(int, int);
 	void gameOutput();
 	void selectColor(int, int, int, int, int, int);
 	bool checkMove();
