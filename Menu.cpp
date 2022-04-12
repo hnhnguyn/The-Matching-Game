@@ -103,27 +103,33 @@ void Menu::menuGetName() {
 void Menu::nameInput() {
 	for (int i = 0; i < 10; i++) {
 		int input = _getch();
-		if ((48 <= input && input <= 57) ||
-			(65 <= input && input <= 90) ||
-			(97 <= input && input <= 122)) {
-			cout << char(input);
-			name += char(input);
+		if (input == 0 || input == 224) {
+			input = _getch();
+			i--;
 		}
-		else if (input == 13) {
-			if (i != 0) {
+		else {
+			if ((48 <= input && input <= 57) ||
+				(65 <= input && input <= 90) ||
+				(97 <= input && input <= 122)) {
+				cout << char(input);
+				name += char(input);
+			}
+			else if (input == 13) {
+				if (i != 0) {
+					Common::showCur(false);
+					menuPlayOutput();
+				}
+				else {
+					i--;
+				}
+			}
+			else if (input == 27) {
 				Common::showCur(false);
-				menuPlayOutput();
+				Common::exitOutput(1);
 			}
 			else {
 				i--;
 			}
-		}
-		else if (input == 27) {
-			Common::showCur(false);
-			Common::exitOutput(1);
-		}
-		else {
-			i--;
 		}
 	}
 	Common::showCur(false);
@@ -133,7 +139,6 @@ void Menu::nameInput() {
 	} while (input != 13);
 	menuPlayOutput();
 }
-
 
 void Menu::menuPlayOutput() {
 	system("cls");
@@ -194,6 +199,33 @@ void Menu::menuPlayInput() {
 	Common::exitOutput(1);
 }
 
+void Menu::printLeadBoard() {
+	Common::goTo(centerX - 1, leadBoardY - distY);
+	for (int i = 0; i < 23; i++) {
+		cout << '_';
+	}
+	Common::goTo(centerX - 1, leadBoardY + 1);
+	for (int i = 0; i < 23; i++) {
+		cout << '_';
+	}
+	Common::goTo(centerX - 1, botY - distY - 1);
+	for (int i = 0; i < 23; i++) {
+		cout << '_';
+	}
+	for (int i = 1; i < 16; i++) {
+		Common::goTo(centerX - 2, leadBoardY - distY + i);
+		cout << '|';
+	}
+	for (int i = 1; i < 16; i++) {
+		Common::goTo(centerX + distX * 3, leadBoardY - distY + i);
+		cout << '|';
+	}
+	for (int i = 1; i < 16; i++) {
+		Common::goTo(centerX + distX * 5 + 2, leadBoardY - distY + i);
+		cout << '|';
+	}
+}
+
 void Menu::menuLeaderboard() {
 	system("cls");
 	int x = leadTitleX;
@@ -211,6 +243,11 @@ void Menu::menuLeaderboard() {
 	in.close();
 	x = centerX;
 	y = leadBoardY;
+	Common::goTo(x, y);
+	cout << "NAME";
+	Common::goTo(x + (distX * 4), y);
+	cout << "SCORE";
+	y += distY + 1;
 	in.open("topPlayers.txt");
 	in.ignore();
 	while (!in.eof()) {
@@ -219,7 +256,7 @@ void Menu::menuLeaderboard() {
 		Common::goTo(x, y);
 		getline(ss, name, ' ');
 		cout << name;
-		x += distX * 3;
+		x += distX * 4;
 		Common::goTo(x, y);
 		getline(ss, time);
 		cout << setprecision(2) << fixed << stod(time);
@@ -227,7 +264,8 @@ void Menu::menuLeaderboard() {
 		y++;
 	}
 	in.close(); 
-	Common::goTo(centerX, botY);
+	printLeadBoard();
+	Common::goTo(centerX + distX, botY);
 	cout << "> BACK TO MENU";
 	int input = -1;
 	do {
@@ -251,7 +289,7 @@ void Menu::menuTutorial() {
 		cout << tuto << endl;
 	}
 	in.close();
-	Common::goTo(centerX, botY);
+	Common::goTo(centerX + distX, botY);
 	cout << "> BACK TO MENU";
 	int input = -1;
 	do {
@@ -275,7 +313,7 @@ void Menu::menuAbout() {
 		cout << line << endl;
 	}
 	in.close();
-	Common::goTo(centerX, botY);
+	Common::goTo(centerX + distX, botY);
 	cout << "> BACK TO MENU";
 	int input = -1;
 	do {

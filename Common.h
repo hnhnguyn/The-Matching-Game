@@ -28,9 +28,9 @@ using namespace std;
 #define LIGHT_PURPLE 13
 #define LIGHT_YELLOW 14
 #define BRIGHT_WHITE 15
-#define size 4
+#define size 8
 #define distX 4
-#define centerX 50
+#define centerX 49
 #define btnX 30
 #define leadTitleX 20
 #define distY 2
@@ -42,7 +42,7 @@ using namespace std;
 #define resultY 8
 #define btnY 2
 #define gameY 10
-#define leadBoardY 12
+#define leadBoardY 9
 #define botY 25
 
 struct Common {
