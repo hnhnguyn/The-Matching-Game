@@ -1,21 +1,21 @@
-		HOW TO PLAY?				Controlling keys:
-	-----------------------------------------	Up arrow	move up
-	| MATCH ALL PAIRS OF SIMILAR CHARACTERS |	Down arrow	move down
-	-----------------------------------------	Right arrow	move right
-							Left arrow	move left
-		VALID MATCHING:				Enter		choose object
+			HOW TO PLAY?				Controlling keys:
+		-----------------------------------------	Up arrow	move up
+		| MATCH ALL PAIRS OF SIMILAR CHARACTERS |	Down arrow	move down
+		-----------------------------------------	Right arrow	move right
+								Left arrow	move left
+			VALID MATCHING:				Enter		choose object
 															
-	I matching			Z matching	
+		I matching			Z matching	
 				
-Object A ------- Object A'	Object B --------			
-						|			
-						|			
-						-------- Object B' 
+	Object A ------- Object A'	Object B --------			
+							|			
+							|			
+							-------- Object B' 
 
 
-	L matching			U matching
+		L matching			U matching
 
-Object C			Object D	Object D
-|				    |		   |
-|			  	    |		   |
--------- Object C'	  	    ----------------
+	Object C			Object D	Object D
+	|				    |		   |
+	|			  	    |		   |
+	-------- Object C'	  	    ----------------
