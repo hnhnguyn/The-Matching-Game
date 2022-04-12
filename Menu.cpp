@@ -127,7 +127,7 @@ void Menu::nameInput() {
 		}
 	}
 	Common::showCur(false);
-	int input = _getch();
+	int input;
 	do {
 		input = _getch();
 	} while (input != 13);
