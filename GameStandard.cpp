@@ -7,6 +7,7 @@ GameStandard::GameStandard() {
 	Common::consoleSetup();
 	charArr.arr = charArr.gen2DArr(size, size, size * size);
 	chCnt = 0;
+	time_taken = 0;
 	gameX = centerX - size / 2;
 	gameOutput();
 }
@@ -143,7 +144,6 @@ void GameStandard::gameOutput() {
 
 void GameStandard::inputProcess() {
 	int sltRow = 0, sltCol = 0;
-	time_taken = 0;
 	int input = -1;
 	int x = gameX + distX * sltRow;
 	int y = gameY + distY * sltCol;
@@ -262,7 +262,7 @@ void GameStandard::inputProcess() {
 			Menu::menuOutput();
 			break;
 		case 7: //P
-			time_taken += double(clock() - time / double(CLOCKS_PER_SEC)) / 1000;
+			time_taken += double(clock() - time) / CLOCKS_PER_SEC;
 			pauseScreen();
 			break;
 		case 8: //H
@@ -274,7 +274,7 @@ void GameStandard::inputProcess() {
 			break;
 		}
 		if (chCnt == size * size) {
-			time_taken += double(clock() - time / double(CLOCKS_PER_SEC)) / 1000;
+			time_taken += double(clock() - time) / CLOCKS_PER_SEC;
 			Menu::menuDoneOutput(time_taken);
 		}
 	} while (input != 0);

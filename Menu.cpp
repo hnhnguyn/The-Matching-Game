@@ -25,6 +25,7 @@ void Menu::titleOutput() {
 
 void Menu::menuOutput() {
 	system("cls");
+	name = "";
 	titleOutput();
 	for (int i = 0; i < sizeof(menuList) / sizeof(menuList[0]); i++) {
 		int x = centerX;
@@ -96,10 +97,43 @@ void Menu::menuGetName() {
 	Common::showCur(true);
 	Common::goTo(centerX, playY);
 	cout << "Enter your name: ";
-	cin >> name;
+	nameInput();
+}
+
+void Menu::nameInput() {
+	for (int i = 0; i < 10; i++) {
+		int input = _getch();
+		if ((48 <= input && input <= 57) ||
+			(65 <= input && input <= 90) ||
+			(97 <= input && input <= 122)) {
+			cout << char(input);
+			name += char(input);
+		}
+		else if (input == 13) {
+			if (i != 0) {
+				Common::showCur(false);
+				menuPlayOutput();
+			}
+			else {
+				i--;
+			}
+		}
+		else if (input == 27) {
+			Common::showCur(false);
+			Common::exitOutput(1);
+		}
+		else {
+			i--;
+		}
+	}
 	Common::showCur(false);
+	int input = _getch();
+	do {
+		input = _getch();
+	} while (input != 13);
 	menuPlayOutput();
 }
+
 
 void Menu::menuPlayOutput() {
 	system("cls");
@@ -162,10 +196,21 @@ void Menu::menuPlayInput() {
 
 void Menu::menuLeaderboard() {
 	system("cls");
-	int x = centerX;
-	int y = leaderboardY;
+	int x = leadTitleX;
+	int y = leadTitleY;
 	string s, name, time;
+	string title;
 	ifstream in;
+	in.open("leaderboard.txt");
+	while (!in.eof()) {
+		Common::goTo(x, y);
+		getline(in, title);
+		cout << title << endl;
+		y++;
+	}
+	in.close();
+	x = centerX;
+	y = leadBoardY;
 	in.open("topPlayers.txt");
 	in.ignore();
 	while (!in.eof()) {
@@ -173,9 +218,12 @@ void Menu::menuLeaderboard() {
 		stringstream ss(s);
 		Common::goTo(x, y);
 		getline(ss, name, ' ');
-		cout << name << " ";
+		cout << name;
+		x += distX * 3;
+		Common::goTo(x, y);
 		getline(ss, time);
 		cout << setprecision(2) << fixed << stod(time);
+		x = centerX;
 		y++;
 	}
 	in.close(); 

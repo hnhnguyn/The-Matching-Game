@@ -19,6 +19,7 @@ struct Menu {
 	static void menuOutput();
 	static void menuInput();
 	static void menuGetName();
+	static void nameInput();
 	static void menuPlayOutput();
 	static void menuPlayInput();
 	static void menuLeaderboard();
