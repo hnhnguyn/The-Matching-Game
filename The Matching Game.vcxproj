@@ -151,6 +151,11 @@
     <ClInclude Include="GameStandard.h" />
     <ClInclude Include="Menu.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="about.txt" />
+    <Text Include="topPlayers.txt" />
+    <Text Include="tutorial.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

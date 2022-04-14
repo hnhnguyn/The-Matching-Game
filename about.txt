@@ -1,0 +1,13 @@
+	Instructor: Bui Huy Thong
+
+	This game is made by:
+		+ Dinh The Anh		21127489
+		+ Nguyen Hong Hanh	21127503
+
+	Contact: 
+		+ dta21@clc.fitus.edu.vn
+		+ nhhanh21@clc.fitus.edu.vn
+
+		Ho Chi Minh University of Science, major in Information Technology
+
+						04/2022

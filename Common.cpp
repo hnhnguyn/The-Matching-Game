@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Common.h"
 
 const string Common::exitList[2] = { "YES", "NO" };
 
@@ -8,7 +8,15 @@ void Common::consoleSetup() {
 	setWindowSize(300, 300);
 	disableResizeWindow();
 	disableMaxButton();
-	hideScrollBars(); 
+	hideScrollBars();
+}
+
+void Common::matchedsound() {
+	PlaySound(TEXT("correct.wav"), NULL, SND_FILENAME | SND_ASYNC);
+}
+
+void Common::selectsound() {
+	PlaySound(TEXT("select.wav"), NULL, SND_FILENAME | SND_ASYNC);
 }
 
 void Common::goTo(SHORT posX, SHORT posY) {
@@ -33,14 +41,14 @@ int Common::getInput() {
 	input = _getch();
 	switch (input) {
 	case 0: case 224:
-		switch(_getch()) {
-		case 75: 
+		switch (_getch()) {
+		case 75:
 			return 1;
-		case 72: 
+		case 72:
 			return 2;
-		case 80: 
+		case 80:
 			return 3;
-		case 77: 
+		case 77:
 			return 4;
 		default:
 			return -1;

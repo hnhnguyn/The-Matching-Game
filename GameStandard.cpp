@@ -1,5 +1,5 @@
-#include "GameStandard.h"
-const string GameStandard::gameBtnList[4] = { "BACK TO MENU: B", "PAUSE: P", "HINT: H"};
+﻿#include "GameStandard.h"
+const string GameStandard::gameBtnList[4] = { "BACK TO MENU: B", "PAUSE: P", "HINT: H" };
 const string GameStandard::menuBackList[2] = { "YES", "NO" };
 const string GameStandard::pauseList[3] = { "RESUME", "REPLAY", "BACK TO MENU" };
 
@@ -16,7 +16,7 @@ GameStandard::GameStandard() {
 void GameStandard::selectColor(int x, int y, int background, int text, int i, int j) {
 	Common::goTo(x, y);
 	Common::setColor(background, text);
-	cout << " " << charArr.arr[i][j] << " ";
+	std::cout << " " << charArr.arr[i][j] << " ";
 	Common::setColor(BLACK, WHITE);
 }
 
@@ -62,7 +62,7 @@ void GameStandard::shuffle() {
 	char** tmpCh;
 	tmpCh = new char* [size];
 	for (int i = 0; i < size; i++) {
-		tmpCh[i] = new char [size];
+		tmpCh[i] = new char[size];
 	}
 	for (int i = 0; i < size * size; i++) {
 		tmpCh[position[i] / size][position[i] % size] = charArr.arr[i / size][i % size];
@@ -81,6 +81,7 @@ void GameStandard::shuffle() {
 
 void GameStandard::gameOutput() {
 	system("cls");
+	int j = 0; int i = 0;
 	while (!checkMove()) {
 		shuffle();
 	}
@@ -90,10 +91,37 @@ void GameStandard::gameOutput() {
 		Common::goTo(x, y);
 		cout << gameBtnList[i];
 	}
+	int x = gameX + distX * j;
+	int y = gameY + distY * i;
+
+	int a = x;						// a la vi tri cua canh ben phai cua cai khung
+	int _y = gameY + distY * size;	// _y la vi tri cua canh duoi cung cua cai khung
+
+	// Code in ra canh tren va duoi
+	Common::goTo(x, y - 1);
+	for (int j = 0; j < size; j++) {
+		cout << "---";
+		if (j + 1 != size) cout << '-';
+	}
+	Common::goTo(x, _y - 1);
+	for (int j = 0; j < size; j++) {
+		cout << "---";
+		if (j + 1 != size) cout << '-';
+	}
+	// End
+	Common::goTo(x, y - 1);
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < size; j++) {
-			int x = gameX + distX * j;
-			int y = gameY + distY * i;
+			x = gameX + distX * j;
+			y = gameY + distY * i;
+			// Code in ra canh ben phai
+			Common::goTo(a - 1, y);
+			cout << "|";
+			if (i + 1 != size) {
+				Common::goTo(a - 1, y + 1);
+				cout << "|";
+			}
+			// End
 			Common::goTo(x, y);
 			if (x == gameX && y == gameY) {
 				Common::setColor(BRIGHT_WHITE, BLACK);
@@ -104,6 +132,13 @@ void GameStandard::gameOutput() {
 				cout << " " << charArr.arr[i][j] << " ";
 			}
 		}
+		// Code in ra canh ben trai
+		cout << "|";
+		if (i + 1 != size) {
+			Common::goTo(x + 3, y + 1);
+			cout << "|";
+		}
+		// End
 	}
 	inputProcess();
 }
@@ -181,7 +216,7 @@ void GameStandard::inputProcess() {
 			}
 			break;
 		case 5: //ENTER
-			if(charArr.arr[sltRow][sltCol] != ' ') {
+			if (charArr.arr[sltRow][sltCol] != ' ') {
 				if (sltedRow == sltRow && sltedCol == sltCol) {
 					Common::goTo(x, y);
 					selectColor(x, y, BRIGHT_WHITE, BLACK, sltRow, sltCol);
@@ -203,7 +238,8 @@ void GameStandard::inputProcess() {
 							selectColor(sltedX, sltedY, BLACK, WHITE, sltedRow, sltedCol);
 							charArr.arr[sltRow][sltCol] = ' ';
 							selectColor(x, y, BRIGHT_WHITE, BLACK, sltRow, sltCol);
-							chCnt += 2; 
+							chCnt += 2;
+							Common::matchedsound();
 						}
 						else {
 							selectColor(sltedX, sltedY, BLACK, WHITE, sltedRow, sltedCol);
@@ -227,7 +263,7 @@ void GameStandard::inputProcess() {
 			Menu::menuOutput();
 			break;
 		case 7: //P
-			time_taken += (clock() - time) / (CLOCKS_PER_SEC);
+			time_taken += double(clock() - time) / CLOCKS_PER_SEC;
 			pauseScreen();
 			break;
 		case 8: //H
@@ -239,7 +275,7 @@ void GameStandard::inputProcess() {
 			break;
 		}
 		if (chCnt == size * size) {
-			time_taken += (clock() - time) / (CLOCKS_PER_SEC);
+			time_taken += double(clock() - time) / CLOCKS_PER_SEC;
 			Menu::menuDoneOutput(time_taken);
 		}
 	} while (input != 0);
@@ -291,7 +327,7 @@ bool GameStandard::checkIMatch(int preRow, int preCol, int postRow, int postCol)
 			}
 		}
 		else {
-			for (int i = postCol +1; i < preCol; i++) {
+			for (int i = postCol + 1; i < preCol; i++) {
 				if (charArr.arr[preRow][i] != ' ') {
 					check = 0;
 				}
@@ -325,7 +361,8 @@ bool GameStandard::checkUMatch(int preRow, int preCol, int postRow, int postCol)
 		if (preRow == 0 || preRow == size - 1) {
 			return 1;
 		}
-	} else if (preRow > postRow) {
+	}
+	else if (preRow > postRow) {
 		swap(preRow, postRow);
 		swap(preCol, postCol);
 	}
@@ -521,4 +558,3 @@ void GameStandard::pauseInput() {
 	} while (input != 0);
 	Menu::Menu();
 }
-

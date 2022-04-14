@@ -1,9 +1,5 @@
 #pragma once
-#include <iostream>
-#include <windows.h>
-#include <conio.h>
-#include <time.h>
-#include "common.h"
+#include "Common.h"
 #include "CharArr.h"
 #include "Menu.h"
 using namespace std;
@@ -25,9 +21,10 @@ struct GameStandard {
 	int gameX;
 	int chCnt;
 	clock_t time;
-	int time_taken;
+	double time_taken;
 
 	GameStandard();
+	void Genboard(int, int);
 	void gameOutput();
 	void selectColor(int, int, int, int, int, int);
 	bool checkMove();
