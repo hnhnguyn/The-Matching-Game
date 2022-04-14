@@ -3,11 +3,11 @@
 #include "CharArr.h"
 
 void CharArr::randomCharArr(char*& ch, int n) {
-	ch = new char[n];
 	int check[26];
 	for (int i = 0; i < 26; i++) {
 		check[i] = 0;
 	}
+	ch = new char[n];
 	for (int i = 0; i < n - 1; i+=2) {
 		int tmp = rand() % 26;
 		if (n / 2 <= 26) {
