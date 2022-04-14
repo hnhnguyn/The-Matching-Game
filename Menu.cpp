@@ -127,6 +127,10 @@ void Menu::nameInput() {
 				Common::showCur(false);
 				Common::exitOutput(1);
 			}
+			else if (input == 8) {
+				name = "";
+				menuGetName();
+			}
 			else {
 				i--;
 			}
@@ -136,6 +140,14 @@ void Menu::nameInput() {
 	int input;
 	do {
 		input = _getch();
+		if (input == 27) {
+			Common::showCur(false);
+			Common::exitOutput(1);
+		}
+		else if (input == 8) {
+			name = "";
+			menuGetName();
+		}
 	} while (input != 13);
 	menuPlayOutput();
 }
