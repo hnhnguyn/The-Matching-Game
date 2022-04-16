@@ -79,10 +79,8 @@ void GameStandard::shuffle() {
 }
 
 void GameStandard::printGameBoard() {
-	int j = 0; 
-	int i = 0;
-	int x = gameX + distX * j;
-	int y = gameY + distY * i;
+	int x = gameX;
+	int y = gameY;
 
 	int a = x;						// a la vi tri cua canh ben phai cua cai khung
 	int _y = gameY + distY * size;	// _y la vi tri cua canh duoi cung cua cai khung
@@ -150,8 +148,8 @@ void GameStandard::gameOutput() {
 void GameStandard::inputProcess() {
 	int sltRow = 0, sltCol = 0;
 	int input = -1;
-	int x = gameX + distX * sltRow;
-	int y = gameY + distY * sltCol;
+	int x = gameX;
+	int y = gameY;
 	int sltedX = -1, sltedY = -1, sltedRow = -1, sltedCol = -1, sltCnt = 0;
 	int hint = 0;
 	time = clock();
