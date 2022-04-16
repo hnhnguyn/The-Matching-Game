@@ -78,18 +78,9 @@ void GameStandard::shuffle() {
 	delete[] tmpCh;
 }
 
-void GameStandard::gameOutput() {
-	system("cls");
-	int j = 0; int i = 0;
-	while (!checkMove()) {
-		shuffle();
-	}
-	for (int i = 0; i < sizeof(gameBtnList) / sizeof(gameBtnList[0]); i++) {
-		int x = btnX;
-		int y = btnY + distY * i;
-		Common::goTo(x, y);
-		cout << gameBtnList[i];
-	}
+void GameStandard::printGameBoard() {
+	int j = 0; 
+	int i = 0;
 	int x = gameX + distX * j;
 	int y = gameY + distY * i;
 
@@ -139,6 +130,20 @@ void GameStandard::gameOutput() {
 		}
 		// End
 	}
+}
+
+void GameStandard::gameOutput() {
+	system("cls");
+	while (!checkMove()) {
+		shuffle();
+	}
+	for (int i = 0; i < sizeof(gameBtnList) / sizeof(gameBtnList[0]); i++) {
+		int x = btnX;
+		int y = btnY + distY * i;
+		Common::goTo(x, y);
+		cout << gameBtnList[i];
+	}
+	printGameBoard();
 	inputProcess();
 }
 
