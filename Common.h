@@ -28,7 +28,7 @@ using namespace std;
 #define LIGHT_PURPLE 13
 #define LIGHT_YELLOW 14
 #define BRIGHT_WHITE 15
-#define size 4
+#define size 8
 #define distX 4
 #define centerX 49
 #define btnX 30

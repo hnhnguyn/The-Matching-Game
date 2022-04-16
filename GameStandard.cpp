@@ -317,6 +317,7 @@ bool GameStandard::checkIMatch(int preRow, int preCol, int postRow, int postCol)
 		for (int i = preRow + 1; i < postRow; i++) {
 			if (charArr.arr[i][preCol] != ' ') {
 				check = 0;
+				break;
 			}
 		}
 	}
@@ -325,6 +326,7 @@ bool GameStandard::checkIMatch(int preRow, int preCol, int postRow, int postCol)
 			for (int i = preCol + 1; i < postCol; i++) {
 				if (charArr.arr[preRow][i] != ' ') {
 					check = 0;
+					break;
 				}
 			}
 		}
@@ -332,6 +334,7 @@ bool GameStandard::checkIMatch(int preRow, int preCol, int postRow, int postCol)
 			for (int i = postCol + 1; i < preCol; i++) {
 				if (charArr.arr[preRow][i] != ' ') {
 					check = 0;
+					break;
 				}
 			}
 		}
@@ -369,15 +372,12 @@ bool GameStandard::checkUMatch(int preRow, int preCol, int postRow, int postCol)
 		swap(preCol, postCol);
 	}
 	int check = 0;
-	for (int i = preRow; i > 0; i--) {
+	for (int i = preRow - 1; i >= 0; i--) {
 		check++;
-		if (checkIMatch(preRow, preCol, i - 1, preCol) && charArr.arr[i - 1][preCol] == ' ' && checkLMatch(i - 1, preCol, postRow, postCol)) {
+		if (charArr.arr[i][preCol] != ' ') {
+			break;
+		} else if (checkLMatch(i, preCol, postRow, postCol)) {
 			return 1;
-		}
-		if (i == 1) {
-			if (checkIMatch(preRow, preCol, i - 1, preCol) && charArr.arr[i - 1][preCol] == ' ' && checkIMatch(i - 1, postCol, postRow, postCol) && charArr.arr[i - 1][postCol] == ' ') {
-				return 1;
-			}
 		}
 	}
 	if (check == 0) {
@@ -386,15 +386,12 @@ bool GameStandard::checkUMatch(int preRow, int preCol, int postRow, int postCol)
 		}
 	}
 	check = 0;
-	for (int i = postRow; i < size - 1; i++) {
+	for (int i = postRow + 1; i < size; i++) {
 		check++;
-		if (checkIMatch(preRow, preCol, i + 1, preCol) && charArr.arr[i + 1][preCol] == ' ' && checkLMatch(i + 1, preCol, postRow, postCol)) {
+		if (charArr.arr[i][preCol] != ' ') {
+			break;
+		} else if (checkLMatch(i, preCol, postRow, postCol)) {
 			return 1;
-		}
-		if (i == size - 2) {
-			if (checkIMatch(preRow, preCol, i + 1, preCol) && charArr.arr[i + 1][preCol] == ' ' && checkIMatch(i + 1, postCol, postRow, postCol) && charArr.arr[i + 1][postCol] == ' ') {
-				return 1;
-			}
 		}
 	}
 	if (check == 0) {
@@ -404,14 +401,11 @@ bool GameStandard::checkUMatch(int preRow, int preCol, int postRow, int postCol)
 	}
 	check = 0;
 	if (preCol <= postCol) {
-		for (int i = 0; i < preCol; i++) {
+		for (int i = preCol - 1; i >= 0; i--) {
 			check++;
-			if (i == 0) {
-				if (checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ' && checkIMatch(postRow, postCol, postRow, i) && charArr.arr[postRow][i] == ' ') {
-					return 1;
-				}
-			}
-			if (checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ' && checkLMatch(preRow, i, postRow, postCol)) {
+			if (charArr.arr[preRow][i] != ' ') {
+				break;
+			} else if (checkLMatch(preRow, i, postRow, postCol)) {
 				return 1;
 			}
 		}
@@ -423,13 +417,10 @@ bool GameStandard::checkUMatch(int preRow, int preCol, int postRow, int postCol)
 		check = 0;
 		for (int i = postCol + 1; i < size; i++) {
 			check++;
-			if (checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ' && checkLMatch(preRow, i, postRow, postCol)) {
+			if (charArr.arr[preRow][i] != ' ') {
+				break;
+			} else if (checkLMatch(preRow, i, postRow, postCol)) {
 				return 1;
-			}
-			if (i == size - 1) {
-				if (checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ' && checkIMatch(postRow, postCol, postRow, i) && charArr.arr[postRow][i] == ' ') {
-					return 1;
-				}
 			}
 		}
 		if (check == 0) {
@@ -439,14 +430,11 @@ bool GameStandard::checkUMatch(int preRow, int preCol, int postRow, int postCol)
 		}
 	}
 	else {
-		for (int i = 0; i < postCol; i++) {
+		for (int i = postCol - 1; i >= 0; i--) {
 			check++;
-			if (i == 0) {
-				if (checkIMatch(postRow, postCol, postRow, i) && charArr.arr[postRow][i] == ' ' && checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ') {
-					return 1;
-				}
-			}
-			if (checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ' && checkLMatch(preRow, i, postRow, postCol)) {
+			if (charArr.arr[preRow][i] != ' ') {
+				break;
+			} else if (checkLMatch(preRow, i, postRow, postCol)) {
 				return 1;
 			}
 		}
@@ -458,13 +446,11 @@ bool GameStandard::checkUMatch(int preRow, int preCol, int postRow, int postCol)
 		check = 0;
 		for (int i = preCol + 1; i < size; i++) {
 			check++;
-			if (checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ' && checkLMatch(preRow, i, postRow, postCol)) {
-				return 1;
+			if (charArr.arr[preRow][i] != ' ') {
+				break;
 			}
-			if (i == size - 1) {
-				if (checkIMatch(postRow, postCol, postRow, i) && charArr.arr[postRow][i] == ' ' && checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ') {
-					return 1;
-				}
+			if (checkLMatch(preRow, i, postRow, postCol)) {
+				return 1;
 			}
 		}
 		if (check == 0) {
@@ -482,20 +468,26 @@ bool GameStandard::checkZMatch(int preRow, int preCol, int postRow, int postCol)
 		swap(preCol, postCol);
 	}
 	for (int i = preRow + 1; i < postRow; i++) {
-		if (checkIMatch(preRow, preCol, i, preCol) && charArr.arr[i][preCol] == ' ' && checkLMatch(i, preCol, postRow, postCol)) {
+		if (charArr.arr[i][preCol] != ' ') {
+			break;
+		} else if (checkLMatch(i, preCol, postRow, postCol)) {
 			return 1;
 		}
 	}
 	if (preCol < postCol) {
 		for (int i = preCol + 1; i < postCol; i++) {
-			if (checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ' && checkLMatch(preRow, i, postRow, postCol)) {
+			if (charArr.arr[preRow][i] != ' ') {
+				break;
+			} else if (checkLMatch(preRow, i, postRow, postCol)) {
 				return 1;
 			}
 		}
 	}
 	else {
 		for (int i = postCol + 1; i < preCol; i++) {
-			if (checkIMatch(preRow, preCol, preRow, i) && charArr.arr[preRow][i] == ' ' && checkLMatch(preRow, i, postRow, postCol)) {
+			if (charArr.arr[preRow][i] != ' ') {
+				break;
+			} else if (checkLMatch(preRow, i, postRow, postCol)) {
 				return 1;
 			}
 		}
