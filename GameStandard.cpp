@@ -1,4 +1,5 @@
 ﻿#include "GameStandard.h"
+
 const string GameStandard::gameBtnList[4] = { "BACK TO MENU: B", "PAUSE: P", "HINT: H" };
 const string GameStandard::menuBackList[2] = { "YES", "NO" };
 const string GameStandard::pauseList[3] = { "RESUME", "REPLAY", "BACK TO MENU" };

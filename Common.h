@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <string>
 #include <ctime>
+#include <cmath>
 #include "mmsystem.h"
 #include "Menu.h"
 using namespace std;
