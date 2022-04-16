@@ -388,9 +388,9 @@ bool GameStandard::checkUMatch(int preRow, int preCol, int postRow, int postCol)
 	check = 0;
 	for (int i = postRow + 1; i < size; i++) {
 		check++;
-		if (charArr.arr[i][preCol] != ' ') {
+		if (charArr.arr[i][postCol] != ' ') {
 			break;
-		} else if (checkLMatch(i, preCol, postRow, postCol)) {
+		} else if (checkLMatch(preRow, preCol, i, postCol)) {
 			return 1;
 		}
 	}
@@ -417,9 +417,9 @@ bool GameStandard::checkUMatch(int preRow, int preCol, int postRow, int postCol)
 		check = 0;
 		for (int i = postCol + 1; i < size; i++) {
 			check++;
-			if (charArr.arr[preRow][i] != ' ') {
+			if (charArr.arr[postRow][i] != ' ') {
 				break;
-			} else if (checkLMatch(preRow, i, postRow, postCol)) {
+			} else if (checkLMatch(preRow, preCol, postRow, i)) {
 				return 1;
 			}
 		}
@@ -432,9 +432,9 @@ bool GameStandard::checkUMatch(int preRow, int preCol, int postRow, int postCol)
 	else {
 		for (int i = postCol - 1; i >= 0; i--) {
 			check++;
-			if (charArr.arr[preRow][i] != ' ') {
+			if (charArr.arr[postRow][i] != ' ') {
 				break;
-			} else if (checkLMatch(preRow, i, postRow, postCol)) {
+			} else if (checkLMatch(preRow, preCol, postRow, i)) {
 				return 1;
 			}
 		}
