@@ -227,11 +227,15 @@ void GameDifficult::inputProcess() {
 							LinkedList::removeTwice(L.Li[sltRow], sltedCh, sltCh);
 							if (check == 1) {
 								sltIndex-=2;
+								x = sltIndex * distX;
+								sltCh = L.Li[sltRow].tail;
 							}
 							printRow(L.Li[sltRow], sltRow, sltIndex);
-						}
+						} 
 						else {
+							int sltedRow = sltedCh->dt.row;
 							LinkedList::removeNode(L.Li[sltedCh->dt.row], sltedCh);
+							sltedCh = L.Li[sltedRow].tail;
 							printRow(L.Li[sltedCh->dt.row], sltedCh->dt.row, -1);
 							int check = 0;
 							if (sltCh == L.Li[sltRow].tail) {
@@ -240,6 +244,8 @@ void GameDifficult::inputProcess() {
 							LinkedList::removeNode(L.Li[sltRow], sltCh);
 							if (check == 1) {
 								sltIndex--;
+								x = sltIndex * distX;
+								sltCh = L.Li[sltRow].tail;
 							}
 							printRow(L.Li[sltRow], sltRow, sltIndex);
 						}
