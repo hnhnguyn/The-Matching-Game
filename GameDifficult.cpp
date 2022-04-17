@@ -120,8 +120,6 @@ void GameDifficult::gameOutput() {
 void GameDifficult::inputProcess() {
 	int sltRow = 0;
 	int sltIndex = 0;
-	int sltedRow = -1;
-	int sltedIndex = -1;
 	Node* sltCh = LinkedList::findNode(L.Li[sltRow], sltRow, sltIndex);
 	Node* sltedCh = NULL;
 	int input = -1;
@@ -135,7 +133,7 @@ void GameDifficult::inputProcess() {
 			if (sltIndex != 0) {
 				Common::goTo(x, y);
 				if (sltCnt == 1 && x == sltedX && y == sltedY) {
-					selectColor(x, y, LIGHT_AQUA, BLACK, LinkedList::findNode(L.Li[sltRow], sltRow, sltIndex));
+					selectColor(x, y, LIGHT_AQUA, BLACK, sltCh);
 				}
 				else {
 					cout << " " << sltCh->dt.ch << " ";
@@ -143,26 +141,28 @@ void GameDifficult::inputProcess() {
 				sltCh = sltCh->chPrev;
 				sltIndex--;
 				x -= distX;
-				selectColor(x, y, BRIGHT_WHITE, BLACK, LinkedList::findNode(L.Li[sltRow], sltRow, sltIndex));
+				selectColor(x, y, BRIGHT_WHITE, BLACK, sltCh);
 			}
 			break;
 		case 2: //UP
 			if (sltRow != 0) {
 				Common::goTo(x, y);
 				if (sltCnt == 1 && x == sltedX && y == sltedY) {
-					selectColor(x, y, LIGHT_AQUA, BLACK, LinkedList::findNode(L.Li[sltRow], sltRow, sltIndex));
+					selectColor(x, y, LIGHT_AQUA, BLACK, sltCh);
 				}
 				else {
 					cout << " " << sltCh->dt.ch << " ";
 				}
-				while (sltRow != 0) {
-					sltRow--;
-					if (L.Li[sltRow].head) {
-						sltCh = LinkedList::findNode(L.Li[sltRow], sltRow, sltIndex);
-						y -= distY;
-						selectColor(x, y, BRIGHT_WHITE, BLACK, LinkedList::findNode(L.Li[sltRow], sltRow, sltIndex));
-						break;
-					}
+				sltRow--;
+				if (L.Li[sltRow].tail->dt.index >= sltIndex) {
+					sltCh = LinkedList::findNode(L.Li[sltRow], sltRow, sltIndex);
+					y -= distY;
+					selectColor(x, y, BRIGHT_WHITE, BLACK, sltCh);
+					break;
+				}
+				else {
+					sltRow++;
+					selectColor(x, y, BRIGHT_WHITE, BLACK, sltCh);
 				}
 			}
 			break;
@@ -170,27 +170,29 @@ void GameDifficult::inputProcess() {
 			if (sltRow != size - 1) {
 				Common::goTo(x, y);
 				if (sltCnt == 1 && x == sltedX && y == sltedY) {
-					selectColor(x, y, LIGHT_AQUA, BLACK, LinkedList::findNode(L.Li[sltRow], sltRow, sltIndex));
+					selectColor(x, y, LIGHT_AQUA, BLACK, sltCh);
 				}
 				else {
 					cout << " " << sltCh->dt.ch << " ";
 				}
-				while (sltRow != size - 1) {
-					sltRow++;
-					if (L.Li[sltRow].head) {
-						sltCh = LinkedList::findNode(L.Li[sltRow], sltRow, sltIndex);
-						y += distY;
-						selectColor(x, y, BRIGHT_WHITE, BLACK, LinkedList::findNode(L.Li[sltRow], sltRow, sltIndex));
-						break;
-					}
+				sltRow++;
+				if (L.Li[sltRow].tail->dt.index >= sltIndex) {
+					sltCh = LinkedList::findNode(L.Li[sltRow], sltRow, sltIndex);
+					y += distY;
+					selectColor(x, y, BRIGHT_WHITE, BLACK, sltCh);
+					break;
+				}
+				else {
+					sltRow--;
+					selectColor(x, y, BRIGHT_WHITE, BLACK, sltCh);
 				}
 			}
 			break;
 		case 4: //RIGHT
-			if (sltIndex != L.Li->tail->dt.index) {
+			if (sltIndex != L.Li[sltRow].tail->dt.index) {
 				Common::goTo(x, y);
 				if (sltCnt == 1 && x == sltedX && y == sltedY) {
-					selectColor(x, y, LIGHT_AQUA, BLACK, LinkedList::findNode(L.Li[sltRow], sltRow, sltIndex));
+					selectColor(x, y, LIGHT_AQUA, BLACK, sltCh);
 				}
 				else {
 					cout << " " << sltCh->dt.ch << " ";
@@ -198,58 +200,58 @@ void GameDifficult::inputProcess() {
 				sltCh = sltCh->chNext;
 				sltIndex++;
 				x += distX;
-				selectColor(x, y, BRIGHT_WHITE, BLACK, LinkedList::findNode(L.Li[sltRow], sltRow, sltIndex));
+				selectColor(x, y, BRIGHT_WHITE, BLACK, sltCh);
 			}
-
 			break;
 		case 5: //ENTER
-			if (sltCh) {
-				if (sltedRow == sltRow && sltedIndex == sltIndex) {
-					Common::goTo(x, y);
-					selectColor(x, y, BRIGHT_WHITE, BLACK, sltCh);
-					sltedRow = -1;
-					sltedIndex = -1;
-					sltCnt = 0;
+			if (sltCh == sltedCh) {
+				Common::goTo(x, y);
+				selectColor(x, y, BRIGHT_WHITE, BLACK, sltCh);
+				sltedCh = NULL;
+				sltCnt = 0;
+			}
+			else {
+				sltCnt++;
+				if (sltCnt == 1) {
+					sltedX = x;
+					sltedY = y;
+					sltedCh = sltCh;
 				}
-				else {
-					sltCnt++;
-					if (sltCnt == 1) {
-						sltedX = x;
-						sltedY = y;
-						sltedRow = sltRow;
-						sltedIndex = sltIndex;
-						sltedCh = LinkedList::findNode(L.Li[sltedRow], sltedRow, sltedIndex);
-					}
-					else if (sltCnt == 2) {
-						if (GameDifficult::matchCheck(sltCh, sltedCh)) {
-							if (sltedRow == sltRow) {
-								LinkedList::removeTwice(L.Li[sltedRow], sltedCh, sltCh);
-								printRow(L.Li[sltRow], sltRow, sltIndex);
+				else if (sltCnt == 2) {
+					if (matchCheck(sltedCh, sltCh)) {
+						if (sltedCh->dt.row == sltRow) {
+							int check = 0;
+							if (sltCh == L.Li[sltRow].tail) {
+								check = 1;
 							}
-							else {
-								LinkedList::removeNode(L.Li[sltedRow], sltedCh);
-								printRow(L.Li[sltedRow], sltedRow, -1);
-								LinkedList::removeNode(L.Li[sltRow], sltCh);
-								printRow(L.Li[sltRow], sltRow, sltIndex);
+							LinkedList::removeTwice(L.Li[sltRow], sltedCh, sltCh);
+							if (check == 1) {
+								sltIndex-=2;
 							}
-							chCnt += 2;
-							Common::matchedsound();
+							printRow(L.Li[sltRow], sltRow, sltIndex);
 						}
 						else {
-							selectColor(sltedX, sltedY, BLACK, WHITE, sltedCh);
-							sltedX = -1;
-							sltedY = -1;
-							Common::goTo(x, y);
+							LinkedList::removeNode(L.Li[sltedCh->dt.row], sltedCh);
+							printRow(L.Li[sltedCh->dt.row], sltedCh->dt.row, -1);
+							int check = 0;
+							if (sltCh == L.Li[sltRow].tail) {
+								check = 1;
+							}
+							LinkedList::removeNode(L.Li[sltRow], sltCh);
+							if (check == 1) {
+								sltIndex--;
+							}
+							printRow(L.Li[sltRow], sltRow, sltIndex);
 						}
-						/*if (hint == 1) {
-							hint = 0;
-							Common::goTo(0, 0);
-							cout << " " << endl;
-							cout << "    " << endl;
-							cout << "    " << endl;
-						}*/
-						sltCnt = 0;
+						chCnt += 2;
 					}
+					else {
+						selectColor(sltedX, sltedY, BLACK, WHITE, sltedCh);
+						sltedX = -1;
+						sltedY = -1;
+						Common::goTo(x, y);
+					}
+					sltCnt = 0;
 				}
 			}
 			break;
