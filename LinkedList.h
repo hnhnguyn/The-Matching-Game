@@ -29,5 +29,6 @@ struct LinkedList {
 	static void addTail(List &, cData);
 	static void removeTail(List&);
 	static void removeNode(List&, Node*);
+	static void removeTwice(List&, Node*, Node*);
 	static List* setList(int);
 };

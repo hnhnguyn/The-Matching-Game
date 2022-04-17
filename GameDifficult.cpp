@@ -88,6 +88,11 @@ void GameDifficult::printRow(List L, int i, int index) {
 		x += distX;
 		ch = ch->chNext;
 	}
+	for (int i = 0; i < size - L.tail->dt.index; i++) {
+		Common::goTo(x, y);
+		cout << "   ";
+		x += distX;
+	}
 }
 
 void GameDifficult::printBoard() {
@@ -198,57 +203,55 @@ void GameDifficult::inputProcess() {
 
 			break;
 		case 5: //ENTER
-			//if (sltCh) {
-			//	if (sltedRow == sltRow && sltedIndex == sltIndex) {
-			//		Common::goTo(x, y);
-			//		selectColor(x, y, BRIGHT_WHITE, BLACK, sltCh);
-			//		sltedRow = -1;
-			//		sltedIndex = -1;
-			//		sltCnt = 0;
-			//	}
-			//	else {
-			//		sltCnt++;
-			//		if (sltCnt == 1) {
-			//			sltedX = x;
-			//			sltedY = y;
-			//			sltedRow = sltRow;
-			//			sltedIndex = sltIndex;
-			//			sltedCh = LinkedList::findNode(L.Li[sltedRow], sltedRow, sltedIndex);
-			//		}
-			//		else if (sltCnt == 2) {
-			//			if (GameDifficult::matchCheck(sltCh, sltedCh)) {
-			//				LinkedList::removeNode(L.Li[sltedRow], sltedCh);
-			//				printRow(L.Li[sltedRow], sltedRow, -1);
-			//				if (sltCh == L.Li[sltRow].tail) {
-			//					LinkedList::removeTail(L.Li[sltRow]);
-			//					sltIndex--;
-			//					sltCh = L.Li[sltRow].tail;
-			//					printRow(L.Li[sltRow], sltRow, sltIndex);
-			//				}
-			//				else {
-			//					LinkedList::removeNode(L.Li[sltRow], sltCh);
-			//					printRow(L.Li[sltRow], sltRow, sltIndex);
-			//				}
-			//				chCnt += 2;
-			//				Common::matchedsound();
-			//			}
-			//			else {
-			//				selectColor(sltedX, sltedY, BLACK, WHITE, sltedCh);
-			//				sltedX = -1;
-			//				sltedY = -1;
-			//				Common::goTo(x, y);
-			//			}
-			//			/*if (hint == 1) {
-			//				hint = 0;
-			//				Common::goTo(0, 0);
-			//				cout << " " << endl;
-			//				cout << "    " << endl;
-			//				cout << "    " << endl;
-			//			}
-			//			sltCnt = 0;*/
-			//		}
-			//	}
-			//}
+			if (sltCh) {
+				if (sltedRow == sltRow && sltedIndex == sltIndex) {
+					Common::goTo(x, y);
+					selectColor(x, y, BRIGHT_WHITE, BLACK, sltCh);
+					sltedRow = -1;
+					sltedIndex = -1;
+					sltCnt = 0;
+				}
+				else {
+					sltCnt++;
+					if (sltCnt == 1) {
+						sltedX = x;
+						sltedY = y;
+						sltedRow = sltRow;
+						sltedIndex = sltIndex;
+						sltedCh = LinkedList::findNode(L.Li[sltedRow], sltedRow, sltedIndex);
+					}
+					else if (sltCnt == 2) {
+						if (GameDifficult::matchCheck(sltCh, sltedCh)) {
+							if (sltedRow == sltRow) {
+								LinkedList::removeTwice(L.Li[sltedRow], sltedCh, sltCh);
+								printRow(L.Li[sltRow], sltRow, sltIndex);
+							}
+							else {
+								LinkedList::removeNode(L.Li[sltedRow], sltedCh);
+								printRow(L.Li[sltedRow], sltedRow, -1);
+								LinkedList::removeNode(L.Li[sltRow], sltCh);
+								printRow(L.Li[sltRow], sltRow, sltIndex);
+							}
+							chCnt += 2;
+							Common::matchedsound();
+						}
+						else {
+							selectColor(sltedX, sltedY, BLACK, WHITE, sltedCh);
+							sltedX = -1;
+							sltedY = -1;
+							Common::goTo(x, y);
+						}
+						/*if (hint == 1) {
+							hint = 0;
+							Common::goTo(0, 0);
+							cout << " " << endl;
+							cout << "    " << endl;
+							cout << "    " << endl;
+						}*/
+						sltCnt = 0;
+					}
+				}
+			}
 			break;
 		case 6: //B
 			Menu::menuOutput();

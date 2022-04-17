@@ -45,10 +45,7 @@ void LinkedList::removeTail(List &L) {
 	if (L.head == NULL) {
 		return;
 	}
-	Node* ch = L.head;
-	while (ch->chNext->chNext) {
-		ch = ch->chNext;
-	}
+	Node* ch = L.tail->chPrev;
 	ch->chNext = NULL;
 	delete L.tail;
 	L.tail = ch;
@@ -60,8 +57,25 @@ void LinkedList::removeNode(List& L, Node* ch) {
 		tmp->dt.ch = tmp->chNext->dt.ch;
 		tmp = tmp->chNext;
 	}
-	tmp->chPrev->chNext = NULL;
-	delete tmp;
+	removeTail(L);
+}
+
+void LinkedList::removeTwice(List& L, Node* pre, Node* post) {
+	if (pre->dt.index > post->dt.index) {
+		swap(pre, post);
+	}
+	Node* tmp = post;
+	while (tmp->chNext) {
+		tmp->dt.ch = tmp->chNext->dt.ch;
+		tmp = tmp->chNext;
+	}
+	removeTail(L);
+	tmp = pre;
+	while (tmp->chNext) {
+		tmp->dt.ch = tmp->chNext->dt.ch;
+		tmp = tmp->chNext;
+	}
+	removeTail(L);
 }
 
 List* LinkedList::setList(int n) {
