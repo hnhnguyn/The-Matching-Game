@@ -1,6 +1,6 @@
 #pragma once
-#include "Common.h"
-#include "Menu.h"
+#include <iostream>
+using namespace std;
 
 struct cData {
 	char ch = ' ';
@@ -20,7 +20,7 @@ struct List {
 };
 
 struct LinkedList {
-	List* Li = new List[size];
+	List* Li;
 
 	LinkedList();
 	static Node* createNode(cData);

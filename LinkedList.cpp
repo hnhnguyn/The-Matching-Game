@@ -1,7 +1,5 @@
 #include "LinkedList.h"
 
-LinkedList::LinkedList() {};
-
 Node* LinkedList::createNode(cData dt) {
 	Node* ch = new Node;
 	ch->dt = dt;

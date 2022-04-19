@@ -5,6 +5,7 @@
 #include <string>
 #include "Common.h"
 #include "GameStandard.h"
+#include "GameDifficult.h"
 using namespace std;
 
 struct Menu {

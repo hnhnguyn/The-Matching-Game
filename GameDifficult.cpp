@@ -5,6 +5,7 @@ const string GameDifficult::pauseList[3] = { "RESUME", "REPLAY", "BACK TO MENU" 
 
 GameDifficult::GameDifficult() {
 	Common::consoleSetup();
+	LinkedList::LinkedList();
 	L.Li = LinkedList::setList(size);
 	chCnt = 0;
 	time_taken = 0;
@@ -234,7 +235,7 @@ void GameDifficult::inputProcess() {
 					sltedCh = sltCh;
 				}
 				else if (sltCnt == 2) {
-					if (matchCheck(sltedCh, sltCh)) {
+					if (matchCheckLL(sltedCh, sltCh)) {
 						if (sltedCh->dt.row == sltRow) {
 							if (L.Li[sltRow].tail->dt.index == 1 && (sltCh == L.Li[sltRow].tail || sltCh == L.Li[sltRow].head)) {
 								LinkedList::removeNode(L.Li[sltRow], L.Li[sltRow].tail);
@@ -391,27 +392,28 @@ void GameDifficult::inputProcess() {
 			//Menu::menuDoneOutput(time_taken);
 		}
 	} while (input != 0);
+	//LinkedList::delLinkedList(L.Li, size);
 	//GameDifficult::pauseScreen();
 }
 
-bool GameDifficult::matchCheck(Node* preCh, Node* postCh) {
+bool GameDifficult::matchCheckLL(Node* preCh, Node* postCh) {
 	if (preCh->dt.ch == postCh->dt.ch) {
-		if (checkIMatch(preCh, postCh)) {
+		if (checkIMatchLL(preCh, postCh)) {
 			Common::goTo(centerX, botY);
 			cout << "I";
 			return 1;
 		}
-		if (checkLMatch(preCh, postCh)) {
+		if (checkLMatchLL(preCh, postCh)) {
 			Common::goTo(centerX, botY);
 			cout << "L";
 			return 1;
 		}
-		if (checkUMatch(preCh, postCh)) {
+		if (checkUMatchLL(preCh, postCh)) {
 			Common::goTo(centerX, botY);
 			cout << "U";
 			return 1;
 		}
-		if (checkZMatch(preCh, postCh)) {
+		if (checkZMatchLL(preCh, postCh)) {
 			Common::goTo(centerX, botY);
 			cout << "Z";
 			return 1;
@@ -423,7 +425,7 @@ bool GameDifficult::matchCheck(Node* preCh, Node* postCh) {
 	}
 }
 
-bool GameDifficult::checkIMatch(Node* preCh, Node* postCh) {
+bool GameDifficult::checkIMatchLL(Node* preCh, Node* postCh) {
 	if (preCh->dt.row == postCh->dt.row) {
 		if (preCh->chNext == postCh || preCh->chPrev == postCh) {
 			return 1;
@@ -448,7 +450,7 @@ bool GameDifficult::checkIMatch(Node* preCh, Node* postCh) {
 	}
 }
 
-bool GameDifficult::checkLMatch(Node* preCh, Node* postCh) {
+bool GameDifficult::checkLMatchLL(Node* preCh, Node* postCh) {
 	if (preCh->dt.row > postCh->dt.row) {
 		swap(preCh, postCh);
 	}
@@ -476,7 +478,7 @@ bool GameDifficult::checkLMatch(Node* preCh, Node* postCh) {
 	}
 }
 
-bool GameDifficult::checkUMatch(Node* preCh, Node* postCh) {
+bool GameDifficult::checkUMatchLL(Node* preCh, Node* postCh) {
 	if (preCh == L.Li[preCh->dt.row].head && postCh == L.Li[postCh->dt.row].head) {
 		return 1;
 	}
@@ -522,7 +524,7 @@ bool GameDifficult::checkUMatch(Node* preCh, Node* postCh) {
 	return 1;
 }
 
-bool GameDifficult::checkZMatch(Node* preCh, Node* postCh) {
+bool GameDifficult::checkZMatchLL(Node* preCh, Node* postCh) {
 	if (preCh->dt.row > postCh->dt.row) {
 		swap(preCh, postCh);
 	}
@@ -531,7 +533,7 @@ bool GameDifficult::checkZMatch(Node* preCh, Node* postCh) {
 	}
 	if (preCh->dt.index < postCh->dt.index) {
 		for (int i = preCh->dt.row + 1; i < postCh->dt.row; i++) {
-			if (L.Li[i].tail->dt.index < preCh->dt.index && checkLMatch(L.Li[i].tail, postCh)) {
+			if (L.Li[i].tail->dt.index < preCh->dt.index && checkLMatchLL(L.Li[i].tail, postCh)) {
 				return 1;
 			}
 		}
@@ -539,7 +541,7 @@ bool GameDifficult::checkZMatch(Node* preCh, Node* postCh) {
 	}
 	else {
 		for (int i = preCh->dt.row + 1; i < postCh->dt.row; i++) {
-			if (L.Li[i].tail->dt.index < postCh->dt.index && checkLMatch(L.Li[i].tail, preCh)) {
+			if (L.Li[i].tail->dt.index < postCh->dt.index && checkLMatchLL(L.Li[i].tail, preCh)) {
 				return 1;
 			}
 		}

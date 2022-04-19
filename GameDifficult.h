@@ -1,7 +1,7 @@
 #pragma once
 #include "Common.h"
-#include "Menu.h"
 #include "LinkedList.h"
+#include "Menu.h"
 using namespace std;
 
 struct GameDifficult {
@@ -19,14 +19,10 @@ struct GameDifficult {
 	void printBoard();
 	void gameOutput();
 	void selectColor(int, int, int, int, Node*);
-	bool checkMove();
-	void shuffle();
 	void inputProcess();
-	bool checkIMatch(Node*, Node*);
-	bool checkLMatch(Node*, Node*);
-	bool checkUMatch(Node*, Node*);
-	bool checkZMatch(Node*, Node*);
-	bool matchCheck(Node*, Node*);
-	void pauseScreen();
-	void pauseInput();
+	bool checkIMatchLL(Node*, Node*);
+	bool checkLMatchLL(Node*, Node*);
+	bool checkUMatchLL(Node*, Node*);
+	bool checkZMatchLL(Node*, Node*);
+	bool matchCheckLL(Node*, Node*);
 };
