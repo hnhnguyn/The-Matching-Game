@@ -221,12 +221,15 @@ void GameDifficult::inputProcess() {
 					if (matchCheck(sltedCh, sltCh)) {
 						if (sltedCh->dt.row == sltRow) {
 							int check = 0;
-							if (sltCh == L.Li[sltRow].tail) {
+							if (sltCh == L.Li[sltRow].tail->chPrev) {
 								check = 1;
 							}
+							else if (sltCh == L.Li[sltRow].tail) {
+								check = 2;
+							}
 							LinkedList::removeTwice(L.Li[sltRow], sltedCh, sltCh);
-							if (check == 1) {
-								sltIndex-=2;
+							if (check != 0) {
+								sltIndex -= check;
 								x = sltIndex * distX;
 								sltCh = L.Li[sltRow].tail;
 							}
@@ -250,11 +253,15 @@ void GameDifficult::inputProcess() {
 							printRow(L.Li[sltRow], sltRow, sltIndex);
 						}
 						chCnt += 2;
+						sltedX = -1;
+						sltedY = -1;
+						sltedCh = NULL;
 					}
 					else {
 						selectColor(sltedX, sltedY, BLACK, WHITE, sltedCh);
 						sltedX = -1;
 						sltedY = -1;
+						sltedCh = NULL;
 						Common::goTo(x, y);
 					}
 					sltCnt = 0;
