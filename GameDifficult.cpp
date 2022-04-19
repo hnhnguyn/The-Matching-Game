@@ -355,20 +355,53 @@ void GameDifficult::inputProcess() {
 
 bool GameDifficult::matchCheck(Node* preCh, Node* postCh) {
 	if (preCh->dt.ch == postCh->dt.ch) {
-		/*if (preRow == postRow || preCol == postCol) {
-			if (checkIMatch(preRow, preCol, postRow, postCol)) {
-				return 1;
+		if (checkIMatch(preCh, postCh)) {
+			Common::goTo(centerX, botY);
+			cout << "I";
+			return 1;
+		}
+		if (checkLMatch(preCh, postCh)) {
+			Common::goTo(centerX, botY);
+			cout << "L";
+			return 1;
+		}
+		if (checkUMatch(preCh, postCh)) {
+			Common::goTo(centerX, botY);
+			cout << "U";
+			return 1;
+		}
+		if (checkZMatch(preCh, postCh)) {
+			Common::goTo(centerX, botY);
+			cout << "Z";
+			return 1;
+		}
+		return 0;
+	}
+	else {
+		return 0;
+	}
+}
+
+bool GameDifficult::checkIMatch(Node* preCh, Node* postCh) {
+	if (preCh->dt.row == postCh->dt.row) {
+		if (preCh->chNext == postCh || preCh->chPrev == postCh) {
+			return 1;
+		}
+		else {
+			return 0;
+		}
+	}
+	else if (preCh->dt.index == postCh->dt.index) {
+		int check = 0;
+		if (preCh->dt.row > postCh->dt.row) {
+			swap(preCh, postCh);
+			check = 1;
+		}
+		for (int i = preCh->dt.row + 1; i < postCh->dt.row; i++) {
+			if (L.Li[i].tail->dt.index >= preCh->dt.index) {
+				return 0;
 			}
 		}
-		if (checkLMatch(preRow, preCol, postRow, postCol)) {
-			return 1;
-		}
-		if (checkUMatch(preRow, preCol, postRow, postCol)) {
-			return 1;
-		}
-		if (checkZMatch(preRow, preCol, postRow, postCol)) {
-			return 1;
-		}*/
 		return 1;
 	}
 	else {
@@ -376,202 +409,85 @@ bool GameDifficult::matchCheck(Node* preCh, Node* postCh) {
 	}
 }
 
-//bool GameDifficult::checkIMatch(int preRow, int preCol, int postRow, int postCol) {
-//	int check = 1;
-//	if (preRow > postRow) {
-//		swap(preRow, postRow);
-//		swap(preCol, postCol);
-//	}
-//	if (preCol == postCol) {
-//		for (int i = preRow + 1; i < postRow; i++) {
-//			if (charArr.arr[i][preCol] != ' ') {
-//				check = 0;
-//				break;
-//			}
-//		}
-//	}
-//	if (preRow == postRow) {
-//		if (preCol < postCol) {
-//			for (int i = preCol + 1; i < postCol; i++) {
-//				if (charArr.arr[preRow][i] != ' ') {
-//					check = 0;
-//					break;
-//				}
-//			}
-//		}
-//		else {
-//			for (int i = postCol + 1; i < preCol; i++) {
-//				if (charArr.arr[preRow][i] != ' ') {
-//					check = 0;
-//					break;
-//				}
-//			}
-//		}
-//	}
-//	return check;
-//}
+bool GameDifficult::checkLMatch(Node* preCh, Node* postCh) {
+	int check = 0;
+	if (preCh->dt.row > postCh->dt.row) {
+		swap(preCh, postCh);
+		check = 1;
+	}
+	if (preCh->dt.index < postCh->dt.index) {
+		if (preCh != L.Li[preCh->dt.row].tail) {
+			return 0;
+		}
+		for (int i = preCh->dt.row + 1; i < postCh->dt.row; i++) {
+			if (L.Li[i].tail->dt.index >= postCh->dt.index) {
+				return 0;
+			}
+		}
+		return 1;
+	}
+	else {
+		if (postCh != L.Li[postCh->dt.row].tail) {
+			return 0;
+		}
+		for (int i = preCh->dt.row + 1; i < postCh->dt.row; i++) {
+			if (L.Li[i].tail->dt.index >= preCh->dt.index) {
+				return 0;
+			}
+		}
+		return 1;
+	}
+}
 
-//bool GameDifficult::checkLMatch(int preRow, int preCol, int postRow, int postCol) {
-//	if (preRow > postRow) {
-//		swap(preRow, postRow);
-//		swap(preCol, postCol);
-//	}
-//	if (checkIMatch(preRow, preCol, preRow, postCol) && charArr.arr[preRow][postCol] == ' ' && checkIMatch(preRow, postCol, postRow, postCol)) {
-//		return 1;
-//	}
-//	if (checkIMatch(preRow, preCol, postRow, preCol) && charArr.arr[postRow][preCol] == ' ' && checkIMatch(postRow, preCol, postRow, postCol)) {
-//		return 1;
-//	}
-//	return 0;
-//}
-//
-//bool GameDifficult::checkUMatch(int preRow, int preCol, int postRow, int postCol) {
-//	if (preCol == postCol) {
-//		if (preCol == 0 || preCol == size - 1) {
-//			return 1;
-//		}
-//	}
-//	if (preRow == postRow) {
-//		if (preRow == 0 || preRow == size - 1) {
-//			return 1;
-//		}
-//	}
-//	else if (preRow > postRow) {
-//		swap(preRow, postRow);
-//		swap(preCol, postCol);
-//	}
-//	int check = 0;
-//	for (int i = preRow - 1; i >= 0; i--) {
-//		check++;
-//		if (charArr.arr[i][preCol] != ' ') {
-//			break;
-//		}
-//		else if (checkLMatch(i, preCol, postRow, postCol)) {
-//			return 1;
-//		}
-//	}
-//	if (check == 0) {
-//		if (checkIMatch(postRow, postCol, 0, postCol) && charArr.arr[0][postCol] == ' ') {
-//			return 1;
-//		}
-//	}
-//	check = 0;
-//	for (int i = postRow + 1; i < size; i++) {
-//		check++;
-//		if (charArr.arr[i][postCol] != ' ') {
-//			break;
-//		}
-//		else if (checkLMatch(preRow, preCol, i, postCol)) {
-//			return 1;
-//		}
-//	}
-//	if (check == 0) {
-//		if (checkIMatch(preRow, preCol, size - 1, preCol) && charArr.arr[size - 1][preCol] == ' ') {
-//			return 1;
-//		}
-//	}
-//	check = 0;
-//	if (preCol <= postCol) {
-//		for (int i = preCol - 1; i >= 0; i--) {
-//			check++;
-//			if (charArr.arr[preRow][i] != ' ') {
-//				break;
-//			}
-//			else if (checkLMatch(preRow, i, postRow, postCol)) {
-//				return 1;
-//			}
-//		}
-//		if (check == 0) {
-//			if (checkIMatch(postRow, 0, postRow, postCol) && charArr.arr[postRow][0] == ' ') {
-//				return 1;
-//			}
-//		}
-//		check = 0;
-//		for (int i = postCol + 1; i < size; i++) {
-//			check++;
-//			if (charArr.arr[postRow][i] != ' ') {
-//				break;
-//			}
-//			else if (checkLMatch(preRow, preCol, postRow, i)) {
-//				return 1;
-//			}
-//		}
-//		if (check == 0) {
-//			if (checkIMatch(preRow, preCol, preRow, size - 1) && charArr.arr[preRow][size - 1] == ' ') {
-//				return 1;
-//			}
-//		}
-//	}
-//	else {
-//		for (int i = postCol - 1; i >= 0; i--) {
-//			check++;
-//			if (charArr.arr[postRow][i] != ' ') {
-//				break;
-//			}
-//			else if (checkLMatch(preRow, preCol, postRow, i)) {
-//				return 1;
-//			}
-//		}
-//		if (check == 0) {
-//			if (checkIMatch(preRow, 0, preRow, preCol) && charArr.arr[preRow][0] == ' ') {
-//				return 1;
-//			}
-//		}
-//		check = 0;
-//		for (int i = preCol + 1; i < size; i++) {
-//			check++;
-//			if (charArr.arr[preRow][i] != ' ') {
-//				break;
-//			}
-//			if (checkLMatch(preRow, i, postRow, postCol)) {
-//				return 1;
-//			}
-//		}
-//		if (check == 0) {
-//			if (checkIMatch(postRow, postCol, postRow, size - 1) && charArr.arr[postRow][size - 1] == ' ') {
-//				return 1;
-//			}
-//		}
-//	}
-//	return 0;
-//}
-//
-//bool GameDifficult::checkZMatch(int preRow, int preCol, int postRow, int postCol) {
-//	if (preRow > postRow) {
-//		swap(preRow, postRow);
-//		swap(preCol, postCol);
-//	}
-//	for (int i = preRow + 1; i < postRow; i++) {
-//		if (charArr.arr[i][preCol] != ' ') {
-//			break;
-//		}
-//		else if (checkLMatch(i, preCol, postRow, postCol)) {
-//			return 1;
-//		}
-//	}
-//	if (preCol < postCol) {
-//		for (int i = preCol + 1; i < postCol; i++) {
-//			if (charArr.arr[preRow][i] != ' ') {
-//				break;
-//			}
-//			else if (checkLMatch(preRow, i, postRow, postCol)) {
-//				return 1;
-//			}
-//		}
-//	}
-//	else {
-//		for (int i = postCol + 1; i < preCol; i++) {
-//			if (charArr.arr[preRow][i] != ' ') {
-//				break;
-//			}
-//			else if (checkLMatch(preRow, i, postRow, postCol)) {
-//				return 1;
-//			}
-//		}
-//	}
-//	return 0;
-//}
-//
+bool GameDifficult::checkUMatch(Node* preCh, Node* postCh) {
+	if (preCh == L.Li[preCh->dt.row].head && postCh == L.Li[postCh->dt.row].head) {
+		return 1;
+	}
+	if (preCh == L.Li[preCh->dt.row].tail && postCh == L.Li[postCh->dt.row].tail) {
+		return 1;
+	}
+	int check = 0;
+	if (preCh->dt.row > postCh->dt.row) {
+		swap(preCh, postCh);
+		check = 1;
+	}
+	else if (preCh->dt.row == postCh->dt.row) {
+		if (preCh->dt.row == 0 || preCh->dt.row == size - 1) {
+			return 1;
+		}
+		if (L.Li[preCh->dt.row - 1].tail->dt.index >= min(preCh->dt.index, postCh->dt.index)) {
+			return 0;
+		}
+		if (L.Li[preCh->dt.row + 1].tail->dt.index >= min(preCh->dt.index, postCh->dt.index)) {
+			return 0;
+		}
+	}
+
+	for (int i = preCh->dt.row + 1; i < postCh->dt.row; i++) {
+		if (L.Li[i].tail->dt.index >= postCh->dt.index) {
+			return 0;
+		}
+	}
+	return 1;
+}
+
+bool GameDifficult::checkZMatch(Node* preCh, Node* postCh) {
+	int check = 0;
+	if (preCh->dt.row > postCh->dt.row) {
+		swap(preCh, postCh);
+		check = 1;
+	}
+	if (preCh->dt.row + 1 >= postCh->dt.row) {
+		return 0;
+	}
+	for (int i = preCh->dt.row + 1; i < postCh->dt.row; i++) {
+		if (L.Li[i].tail->dt.index >= min(preCh->dt.index, postCh->dt.index)) {
+			return 0;
+		}
+	}
+	return 1;
+}
+
 //void GameDifficult::pauseScreen() {
 //	system("cls");
 //	for (int i = 0; i < sizeof(pauseList) / sizeof(pauseList[0]); i++) {

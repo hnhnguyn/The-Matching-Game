@@ -22,10 +22,10 @@ struct GameDifficult {
 	bool checkMove();
 	void shuffle();
 	void inputProcess();
-	bool checkIMatch(int, int, int, int);
-	bool checkLMatch(int, int, int, int);
-	bool checkUMatch(int, int, int, int);
-	bool checkZMatch(int, int, int, int);
+	bool checkIMatch(Node*, Node*);
+	bool checkLMatch(Node*, Node*);
+	bool checkUMatch(Node*, Node*);
+	bool checkZMatch(Node*, Node*);
 	bool matchCheck(Node*, Node*);
 	void pauseScreen();
 	void pauseInput();
