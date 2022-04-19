@@ -153,15 +153,21 @@ void GameDifficult::inputProcess() {
 				else {
 					cout << " " << sltCh->dt.ch << " ";
 				}
-				sltRow--;
-				if (L.Li[sltRow].tail->dt.index >= sltIndex) {
-					sltCh = LinkedList::findNode(L.Li[sltRow], sltRow, sltIndex);
-					y -= distY;
+				int i = 0;
+				do {
+					sltRow--;
+					i -= distY;
+					if (sltRow < 0) {
+						break;
+					}
+				} while (L.Li[sltRow].tail->dt.index < sltIndex); //|| L.Li[sltRow].head == NULL
+				if (sltRow < 0) {
+					sltRow = sltCh->dt.row;
 					selectColor(x, y, BRIGHT_WHITE, BLACK, sltCh);
-					break;
 				}
 				else {
-					sltRow++;
+					sltCh = LinkedList::findNode(L.Li[sltRow], sltRow, sltIndex);
+					y += i;
 					selectColor(x, y, BRIGHT_WHITE, BLACK, sltCh);
 				}
 			}
@@ -175,15 +181,21 @@ void GameDifficult::inputProcess() {
 				else {
 					cout << " " << sltCh->dt.ch << " ";
 				}
-				sltRow++;
-				if (L.Li[sltRow].tail->dt.index >= sltIndex) {
-					sltCh = LinkedList::findNode(L.Li[sltRow], sltRow, sltIndex);
-					y += distY;
+				int i = 0;
+				do {
+					sltRow++;
+					i += distY;
+					if (sltRow >= size) {
+						break;
+					}
+				} while (L.Li[sltRow].tail->dt.index < sltIndex); //|| L.Li[sltRow].head == NULL
+				if (sltRow >= size) {
+					sltRow = sltCh->dt.row;
 					selectColor(x, y, BRIGHT_WHITE, BLACK, sltCh);
-					break;
 				}
 				else {
-					sltRow--;
+					sltCh = LinkedList::findNode(L.Li[sltRow], sltRow, sltIndex);
+					y += i;
 					selectColor(x, y, BRIGHT_WHITE, BLACK, sltCh);
 				}
 			}
