@@ -157,6 +157,8 @@ void GameDifficult::inputProcess() {
 				do {
 					sltRow--;
 					i -= distY;
+					/*Common::goTo(centerX, botY);
+					cout << L.Li[sltRow].tail->dt.index;*/
 					if (sltRow < 0) {
 						break;
 					}
@@ -185,6 +187,8 @@ void GameDifficult::inputProcess() {
 				do {
 					sltRow++;
 					i += distY;
+					/*Common::goTo(centerX, botY);
+					cout << L.Li[sltRow].tail->dt.index;*/
 					if (sltRow >= size) {
 						break;
 					}
@@ -248,21 +252,66 @@ void GameDifficult::inputProcess() {
 							printRow(L.Li[sltRow], sltRow, sltIndex);
 						} 
 						else {
-							int sltedRow = sltedCh->dt.row;
-							LinkedList::removeNode(L.Li[sltedCh->dt.row], sltedCh);
-							sltedCh = L.Li[sltedRow].tail;
-							printRow(L.Li[sltedCh->dt.row], sltedCh->dt.row, -1);
-							int check = 0;
-							if (sltCh == L.Li[sltRow].tail) {
-								check = 1;
+							if (sltedCh == L.Li[sltedCh->dt.row].head && sltedCh == L.Li[sltedCh->dt.row].tail) {
+								int sltedRow = sltedCh->dt.row;
+								L.Li[sltedRow].head->dt.index = -2;
+								Common::goTo(sltedX, sltedY);
+								cout << "\33[2K\r";
 							}
-							LinkedList::removeNode(L.Li[sltRow], sltCh);
-							if (check == 1) {
-								sltIndex--;
-								x = sltIndex * distX;
-								sltCh = L.Li[sltRow].tail;
+							else {
+								int sltedRow = sltedCh->dt.row;
+								LinkedList::removeNode(L.Li[sltedCh->dt.row], sltedCh);
+								sltedCh = L.Li[sltedRow].tail;
+								printRow(L.Li[sltedCh->dt.row], sltedCh->dt.row, -1);
 							}
-							printRow(L.Li[sltRow], sltRow, sltIndex);
+							if (sltCh == L.Li[sltCh->dt.row].head && sltCh == L.Li[sltCh->dt.row].tail) {
+								L.Li[sltRow].head->dt.index = -2;
+								Common::goTo(x, y);
+								cout << "\33[2K\r";
+								int i = 0;
+								do {
+									sltRow++;
+									i += distY;
+									if (sltRow == size) {
+										break;
+									}
+								} while (L.Li[sltRow].head->dt.index == -2);
+								if (sltRow == size) {
+									sltRow = 0;
+									y = 0;
+									i = 0;
+									while (L.Li[sltRow].head->dt.index == -2) {
+										sltRow++;
+										i += distY;
+										if (sltRow = sltCh->dt.row) {
+											break;
+										}
+									}
+									if (sltRow != sltCh->dt.row) {
+										sltCh = LinkedList::findNode(L.Li[sltRow], sltRow, sltIndex);
+										y += i;
+										selectColor(x, y, BRIGHT_WHITE, BLACK, sltCh);
+									}
+								}
+								else {
+									sltCh = LinkedList::findNode(L.Li[sltRow], sltRow, sltIndex);
+									y += i;
+									selectColor(x, y, BRIGHT_WHITE, BLACK, sltCh);
+								}
+							}
+							else {
+								int check = 0;
+								if (sltCh == L.Li[sltRow].tail) {
+									check = 1;
+								}
+								LinkedList::removeNode(L.Li[sltRow], sltCh);
+								if (check == 1) {
+									sltIndex--;
+									x = sltIndex * distX;
+									sltCh = L.Li[sltRow].tail;
+								}
+								printRow(L.Li[sltRow], sltRow, sltIndex);
+							}
 						}
 						chCnt += 2;
 						sltedX = -1;
@@ -295,10 +344,11 @@ void GameDifficult::inputProcess() {
 				//cout << sg.postRow << ", " << sg.postCol << endl;
 				//break;
 		}
-		//if (chCnt == size * size) {
-		//	time_taken += double(clock() - time / double(CLOCKS_PER_SEC)) / 1000;
-		//	Menu::menuDoneOutput(time_taken);
-		//}
+		if (chCnt == size * size) {
+			cout << "Done";
+			//time_taken += double(clock() - time / double(CLOCKS_PER_SEC)) / 1000;
+			//Menu::menuDoneOutput(time_taken);
+		}
 	} while (input != 0);
 	//GameDifficult::pauseScreen();
 }
