@@ -236,20 +236,61 @@ void GameDifficult::inputProcess() {
 				else if (sltCnt == 2) {
 					if (matchCheck(sltedCh, sltCh)) {
 						if (sltedCh->dt.row == sltRow) {
-							int check = 0;
-							if (sltCh == L.Li[sltRow].tail->chPrev) {
-								check = 1;
+							if (L.Li[sltRow].tail->dt.index == 1 && (sltCh == L.Li[sltRow].tail || sltCh == L.Li[sltRow].head)) {
+								LinkedList::removeNode(L.Li[sltRow], L.Li[sltRow].tail);
+								L.Li[sltRow].head->dt.index = -2;
+								Common::goTo(x, y);
+								cout << "\33[2K\r";
+								int i = 0;
+								do {
+									sltRow++;
+									i += distY;
+									if (sltRow == size) {
+										break;
+									}
+								} while (L.Li[sltRow].head->dt.index == -2);
+								x = 0;
+								if (sltRow == size) {
+									sltRow = 0;
+									y = 0;
+									i = 0;
+									while (L.Li[sltRow].head->dt.index == -2) {
+										sltRow++;
+										i += distY;
+										if (sltRow = sltCh->dt.row) {
+											break;
+										}
+									}
+									if (sltRow != sltCh->dt.row) {
+										sltCh = L.Li[sltRow].head;
+										sltIndex = 0;
+										y += i;
+										selectColor(x, y, BRIGHT_WHITE, BLACK, sltCh);
+									}
+								}
+								else {
+									sltCh = L.Li[sltRow].head;
+									sltIndex = 0;
+									y += i;
+									selectColor(x, y, BRIGHT_WHITE, BLACK, sltCh);
+								}
 							}
-							else if (sltCh == L.Li[sltRow].tail) {
-								check = 2;
+							else {
+								int check = 0;
+								if (sltCh == L.Li[sltRow].tail->chPrev) {
+									check = 1;
+								}
+								else if (sltCh == L.Li[sltRow].tail) {
+									check = 2;
+								}
+								LinkedList::removeTwice(L.Li[sltRow], sltedCh, sltCh);
+								if (check != 0) {
+									sltIndex -= check;
+									x = sltIndex * distX;
+									sltCh = L.Li[sltRow].tail;
+								}
+								printRow(L.Li[sltRow], sltRow, sltIndex);
 							}
-							LinkedList::removeTwice(L.Li[sltRow], sltedCh, sltCh);
-							if (check != 0) {
-								sltIndex -= check;
-								x = sltIndex * distX;
-								sltCh = L.Li[sltRow].tail;
-							}
-							printRow(L.Li[sltRow], sltRow, sltIndex);
 						} 
 						else {
 							if (sltedCh == L.Li[sltedCh->dt.row].head && sltedCh == L.Li[sltedCh->dt.row].tail) {
@@ -392,10 +433,8 @@ bool GameDifficult::checkIMatch(Node* preCh, Node* postCh) {
 		}
 	}
 	else if (preCh->dt.index == postCh->dt.index) {
-		int check = 0;
 		if (preCh->dt.row > postCh->dt.row) {
 			swap(preCh, postCh);
-			check = 1;
 		}
 		for (int i = preCh->dt.row + 1; i < postCh->dt.row; i++) {
 			if (L.Li[i].tail->dt.index >= preCh->dt.index) {
@@ -410,10 +449,8 @@ bool GameDifficult::checkIMatch(Node* preCh, Node* postCh) {
 }
 
 bool GameDifficult::checkLMatch(Node* preCh, Node* postCh) {
-	int check = 0;
 	if (preCh->dt.row > postCh->dt.row) {
 		swap(preCh, postCh);
-		check = 1;
 	}
 	if (preCh->dt.index < postCh->dt.index) {
 		if (preCh != L.Li[preCh->dt.row].tail) {
@@ -446,44 +483,67 @@ bool GameDifficult::checkUMatch(Node* preCh, Node* postCh) {
 	if (preCh == L.Li[preCh->dt.row].tail && postCh == L.Li[postCh->dt.row].tail) {
 		return 1;
 	}
-	int check = 0;
 	if (preCh->dt.row > postCh->dt.row) {
 		swap(preCh, postCh);
-		check = 1;
 	}
 	else if (preCh->dt.row == postCh->dt.row) {
 		if (preCh->dt.row == 0 || preCh->dt.row == size - 1) {
 			return 1;
 		}
-		if (L.Li[preCh->dt.row - 1].tail->dt.index >= min(preCh->dt.index, postCh->dt.index)) {
-			return 0;
+		if (L.Li[preCh->dt.row - 1].tail->dt.index < min(preCh->dt.index, postCh->dt.index)) {
+			return 1;
 		}
-		if (L.Li[preCh->dt.row + 1].tail->dt.index >= min(preCh->dt.index, postCh->dt.index)) {
-			return 0;
+		if (L.Li[preCh->dt.row + 1].tail->dt.index < min(preCh->dt.index, postCh->dt.index)) {
+			return 1;
 		}
 	}
-
-	for (int i = preCh->dt.row + 1; i < postCh->dt.row; i++) {
-		if (L.Li[i].tail->dt.index >= postCh->dt.index) {
+	if (preCh->dt.index < postCh->dt.index) {
+		if (preCh->dt.row > 0 && L.Li[preCh->dt.row - 1].tail->dt.index >= preCh->dt.index) {
 			return 0;
 		}
+		for (int i = preCh->dt.row + 1; i < postCh->dt.row; i++) {
+			if (L.Li[i].tail->dt.index >= postCh->dt.index) {
+				return 0;
+			}
+		}
+		return 1;
+	}
+	else {
+		if (postCh->dt.row < size - 1 && L.Li[postCh->dt.row + 1].tail->dt.index >= postCh->dt.index) {
+			return 0;
+		}
+		for (int i = preCh->dt.row + 1; i < postCh->dt.row; i++) {
+			if (L.Li[i].tail->dt.index >= preCh->dt.index) {
+				return 0;
+			}
+		}
+		return 1;
 	}
 	return 1;
 }
 
 bool GameDifficult::checkZMatch(Node* preCh, Node* postCh) {
-	int check = 0;
 	if (preCh->dt.row > postCh->dt.row) {
 		swap(preCh, postCh);
-		check = 1;
 	}
-	if (preCh->dt.row + 1 >= postCh->dt.row) {
+	if (preCh->dt.row + 1 == postCh->dt.row) {
 		return 0;
 	}
-	for (int i = preCh->dt.row + 1; i < postCh->dt.row; i++) {
-		if (L.Li[i].tail->dt.index >= min(preCh->dt.index, postCh->dt.index)) {
-			return 0;
+	if (preCh->dt.index < postCh->dt.index) {
+		for (int i = preCh->dt.row + 1; i < postCh->dt.row; i++) {
+			if (L.Li[i].tail->dt.index < preCh->dt.index && checkLMatch(L.Li[i].tail, postCh)) {
+				return 1;
+			}
 		}
+		return 0;
+	}
+	else {
+		for (int i = preCh->dt.row + 1; i < postCh->dt.row; i++) {
+			if (L.Li[i].tail->dt.index < postCh->dt.index && checkLMatch(L.Li[i].tail, preCh)) {
+				return 1;
+			}
+		}
+		return 0;
 	}
 	return 1;
 }
