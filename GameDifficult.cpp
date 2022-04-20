@@ -36,7 +36,7 @@ bool GameDifficult::checkMove(List*) {
 								continue;
 							}
 							else {
-								if (matchCheckLL(LinkedList::findNode(L.Li[i], i, j), LinkedList::findNode(L.Li[m], m, n))) {
+								if (matchCheck(LinkedList::findNode(L.Li[i], i, j), LinkedList::findNode(L.Li[m], m, n))) {
 									sg.pre = LinkedList::findNode(L.Li[i], i, j);
 									sg.post = LinkedList::findNode(L.Li[m], m, n);
 									return 1;
@@ -447,7 +447,7 @@ void GameDifficult::inputProcess() {
 	GameDifficult::pauseScreen();
 }
 
-bool GameDifficult::matchCheckLL(Node* preCh, Node* postCh) {
+bool GameDifficult::matchCheck(Node* preCh, Node* postCh) {
 	if (preCh->dt.ch == postCh->dt.ch) {
 		if (preCh->dt.row == postCh->dt.row || preCh->dt.index == postCh->dt.index) {
 			if (checkIMatchLL(preCh, postCh)) {
@@ -461,6 +461,37 @@ bool GameDifficult::matchCheckLL(Node* preCh, Node* postCh) {
 			return 1;
 		}
 		if (checkZMatchLL(preCh, postCh)) {
+			return 1;
+		}
+		return 0;
+	}
+	else {
+		return 0;
+	}
+}
+
+bool GameDifficult::matchCheckLL(Node* preCh, Node* postCh) {
+	if (preCh->dt.ch == postCh->dt.ch) {
+		if (preCh->dt.row == postCh->dt.row || preCh->dt.index == postCh->dt.index) {
+			if (checkIMatchLL(preCh, postCh)) {
+				Common::goTo(0, 0);
+				cout << "I";
+				return 1;
+			}
+		}
+		if (checkLMatchLL(preCh, postCh)) {
+			Common::goTo(0, 0);
+			cout << "L";
+			return 1;
+		}
+		if (checkUMatchLL(preCh, postCh)) {
+			Common::goTo(0, 0);
+			cout << "U";
+			return 1;
+		}
+		if (checkZMatchLL(preCh, postCh)) {
+			Common::goTo(0, 0);
+			cout << "Z";
 			return 1;
 		}
 		return 0;
@@ -582,20 +613,26 @@ bool GameDifficult::checkZMatchLL(Node* preCh, Node* postCh) {
 		return 0;
 	}
 	if (preCh->dt.index < postCh->dt.index) {
+		if (L.Li[preCh->dt.row + 1].tail->dt.index >= preCh->dt.index) {
+			return 0;
+		}
 		for (int i = preCh->dt.row + 1; i < postCh->dt.row; i++) {
-			if (L.Li[i].tail->dt.index < preCh->dt.index && checkLMatchLL(L.Li[i].tail, postCh)) {
-				return 1;
+			if (L.Li[i].tail->dt.index >= postCh->dt.index) {
+				return 0;
 			}
 		}
-		return 0;
+		return 1;
 	}
 	else {
+		if (L.Li[postCh->dt.row - 1].tail->dt.index >= postCh->dt.index) {
+			return 0;
+		}
 		for (int i = preCh->dt.row + 1; i < postCh->dt.row; i++) {
-			if (L.Li[i].tail->dt.index < postCh->dt.index && checkLMatchLL(L.Li[i].tail, preCh)) {
-				return 1;
+			if (L.Li[i].tail->dt.index >= preCh->dt.index) {
+				return 0;
 			}
 		}
-		return 0;
+		return 1;
 	}
 	return 0;
 }
