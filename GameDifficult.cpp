@@ -103,8 +103,8 @@ void GameDifficult::shuffle() {
 }
 
 void GameDifficult::printRow(List L, int i, int index) {
-	int x = 0;
-	int y = distY * i;
+	int x = gameX;
+	int y = gameY + distY * i;
 	Node* ch = L.head;
 	while (ch) {
 		Common::goTo(x, y);
@@ -125,8 +125,8 @@ void GameDifficult::printRow(List L, int i, int index) {
 }
 
 void GameDifficult::printBoard() {
-	int x = 0;
-	int y = 0;
+	int x = gameX;
+	int y = gameY;
 	for (int i = 0; i < size; i++) {
 		if (i == 0) {
 			printRow(L.Li[i], i, 0);
@@ -142,6 +142,12 @@ void GameDifficult::gameOutput() {
 	while (!checkMove(L.Li)) {
 		shuffle();
 	}
+	for (int i = 0; i < sizeof(gameBtnList) / sizeof(gameBtnList[0]); i++) {
+		int x = btnX;
+		int y = btnY + distY * i;
+		Common::goTo(x, y);
+		cout << gameBtnList[i];
+	}
 	printBoard();
 	inputProcess();
 }
@@ -152,8 +158,8 @@ void GameDifficult::inputProcess() {
 	Node* sltCh = LinkedList::findNode(L.Li[sltRow], sltRow, sltIndex);
 	Node* sltedCh = NULL;
 	int input = -1;
-	int x = 0;
-	int y = 0;
+	int x = gameX;
+	int y = gameY;
 	int sltedX = -1, sltedY = -1, sltCnt = 0;
 	int hint = 0;
 	time = clock();
@@ -280,10 +286,10 @@ void GameDifficult::inputProcess() {
 										break;
 									}
 								} while (L.Li[sltRow].head->dt.index == -2);
-								x = 0;
+								x = gameX;
 								if (sltRow == size) {
 									sltRow = 0;
-									y = 0;
+									y = gameY;
 									i = 0;
 									while (L.Li[sltRow].head->dt.index == -2) {
 										sltRow++;
@@ -350,7 +356,7 @@ void GameDifficult::inputProcess() {
 								} while (L.Li[sltRow].head->dt.index == -2);
 								if (sltRow == size) {
 									sltRow = 0;
-									y = 0;
+									y = gameY;
 									i = 0;
 									while (L.Li[sltRow].head->dt.index == -2) {
 										sltRow++;
@@ -399,7 +405,7 @@ void GameDifficult::inputProcess() {
 					}
 					if (hint == 1) {
 						hint = 0;
-						Common::goTo(centerX, botY);
+						Common::goTo(0, 0);
 						cout << "    " << endl;
 						cout << "    " << endl;
 					}
@@ -416,7 +422,7 @@ void GameDifficult::inputProcess() {
 			break;
 		case 8: //H
 				hint++;
-				Common::goTo(centerX, botY);
+				Common::goTo(0, 0);
 				cout << sg.pre->dt.row << ", " << sg.pre->dt.index << endl;
 				cout << sg.post->dt.row << ", " << sg.post->dt.index << endl;
 				break;
