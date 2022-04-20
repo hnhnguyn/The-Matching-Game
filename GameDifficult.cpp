@@ -106,21 +106,23 @@ void GameDifficult::printRow(List L, int i, int index) {
 	int x = gameX;
 	int y = gameY + distY * i;
 	Node* ch = L.head;
-	while (ch) {
-		Common::goTo(x, y);
-		if (ch->dt.index == index) {
-			selectColor(x, y, BRIGHT_WHITE, BLACK, ch);
+	if (ch->dt.index != -2) {
+		while (ch) {
+			Common::goTo(x, y);
+			if (ch->dt.index == index) {
+				selectColor(x, y, BRIGHT_WHITE, BLACK, ch);
+			}
+			else {
+				cout << " " << ch->dt.ch << " ";
+			}
+			x += distX;
+			ch = ch->chNext;
 		}
-		else {
-			cout << " " << ch->dt.ch << " ";
+		for (int i = 0; i < size - L.tail->dt.index; i++) {
+			Common::goTo(x, y);
+			cout << "   ";
+			x += distX;
 		}
-		x += distX;
-		ch = ch->chNext;
-	}
-	for (int i = 0; i < size - L.tail->dt.index; i++) {
-		Common::goTo(x, y);
-		cout << "   ";
-		x += distX;
 	}
 }
 
@@ -153,16 +155,26 @@ void GameDifficult::gameOutput() {
 }
 
 void GameDifficult::inputProcess() {
-	int sltRow = 0;
-	int sltIndex = 0;
-	Node* sltCh = LinkedList::findNode(L.Li[sltRow], sltRow, sltIndex);
+	int sltRow;
+	int sltIndex;
+	Node* sltCh = NULL;
 	Node* sltedCh = NULL;
 	int input = -1;
-	int x = gameX;
-	int y = gameY;
+	int x;
+	int y;
 	int sltedX = -1, sltedY = -1, sltCnt = 0;
 	int hint = 0;
 	time = clock();
+	int m = 0;
+	while (L.Li[m].head->dt.index == -2) {
+		m++;
+	}
+	printRow(L.Li[m], m, 0);
+	sltCh = LinkedList::findNode(L.Li[m], m, 0);
+	sltRow = m;
+	sltIndex = 0;
+	x = gameX + sltIndex * distX;
+	y = gameY + sltRow * distY;
 	do {
 		if (!checkMove(L.Li)) {
 			time_taken += (clock() - time) / CLOCKS_PER_SEC;
