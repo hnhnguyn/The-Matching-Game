@@ -26,6 +26,7 @@ struct GameDifficult {
 	void gameOutput();
 	void selectColor(int, int, int, int, Node*);
 	bool checkMove(List*);
+	void shuffle();
 	void inputProcess();
 	bool checkIMatchLL(Node*, Node*);
 	bool checkLMatchLL(Node*, Node*);

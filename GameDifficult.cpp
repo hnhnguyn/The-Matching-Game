@@ -51,6 +51,57 @@ bool GameDifficult::checkMove(List*) {
 	return 0;
 }
 
+void GameDifficult::shuffle() {
+	int n = size * size - chCnt;
+	char* ch = new char[n];
+	int m = 0;
+	for (int i = 0; i < size; i++) {
+		if (L.Li[i].head->dt.index == -2) {
+			continue;
+		}
+		else {
+			for (int j = 0; j <= L.Li[i].tail->dt.index; j++) {
+				ch[m] = LinkedList::findNode(L.Li[i], i, j)->dt.ch;
+				m++;
+			}
+		}
+	}
+	int* position = new int[n];
+	bool* check = new bool[n];
+	for (int i = 0; i < n; i++) {
+		*(check + i) = 0;
+	}
+	for (int i = 0; i < n; i++) {
+		int tmp;
+		do {
+			tmp = rand() % n;
+		} while (check[tmp]);
+		position[i] = tmp;
+		check[tmp] = 1;
+	}
+	char* randomArr = new char[n];
+	for (int i = 0; i < n; i++) {
+		randomArr[position[i]] = ch[i];
+	}
+	m = 0;
+	for (int i = 0; i < size; i++) {
+		if (L.Li[i].head->dt.index == -2) {
+			continue;
+		}
+		else {
+			for (int j = 0; j <= L.Li[i].tail->dt.index; j++) {
+				LinkedList::findNode(L.Li[i], i, j)->dt.ch = randomArr[m];
+				m++;
+			}
+		}
+	}
+
+	delete[] ch;
+	delete[] check;
+	delete[] position;
+	delete[] randomArr;
+}
+
 void GameDifficult::printRow(List L, int i, int index) {
 	int x = 0;
 	int y = distY * i;
@@ -88,6 +139,9 @@ void GameDifficult::printBoard() {
 
 void GameDifficult::gameOutput() {
 	system("cls");
+	while (!checkMove(L.Li)) {
+		shuffle();
+	}
 	printBoard();
 	inputProcess();
 }
@@ -101,18 +155,12 @@ void GameDifficult::inputProcess() {
 	int x = 0;
 	int y = 0;
 	int sltedX = -1, sltedY = -1, sltCnt = 0;
+	int hint = 0;
 	time = clock();
 	do {
 		if (!checkMove(L.Li)) {
 			time_taken += (clock() - time) / CLOCKS_PER_SEC;
-			Common::goTo(centerX, botY);
-			cout << "Out of moves";
-			Sleep(5000);
-			Menu::menuDoneOutput(time_taken);
-		}
-		else {
-			Common::goTo(centerX, botY);
-			cout << sg.pre->dt.row << sg.pre->dt.index << " " << sg.post->dt.row << sg.post->dt.index;
+			gameOutput();
 		}
 		input = Common::getInput();
 		switch (input) {
@@ -349,6 +397,12 @@ void GameDifficult::inputProcess() {
 						sltedCh = NULL;
 						Common::goTo(x, y);
 					}
+					if (hint == 1) {
+						hint = 0;
+						Common::goTo(centerX, botY);
+						cout << "    " << endl;
+						cout << "    " << endl;
+					}
 					sltCnt = 0;
 				}
 			}
@@ -360,13 +414,12 @@ void GameDifficult::inputProcess() {
 			time_taken += double(clock() - time) / CLOCKS_PER_SEC;
 			pauseScreen();
 			break;
-		//case 8: //H
-				//hint++;
-				//Common::goTo(0, 0);
-				//cout << sg.ch << endl;
-				//cout << sg.preRow << ", " << sg.preCol << endl;
-				//cout << sg.postRow << ", " << sg.postCol << endl;
-				//break;
+		case 8: //H
+				hint++;
+				Common::goTo(centerX, botY);
+				cout << sg.pre->dt.row << ", " << sg.pre->dt.index << endl;
+				cout << sg.post->dt.row << ", " << sg.post->dt.index << endl;
+				break;
 		}
 		if (chCnt == size * size) {
 			time_taken += double(clock() - time) / CLOCKS_PER_SEC;
@@ -380,24 +433,16 @@ bool GameDifficult::matchCheckLL(Node* preCh, Node* postCh) {
 	if (preCh->dt.ch == postCh->dt.ch) {
 		if (preCh->dt.row == postCh->dt.row || preCh->dt.index == postCh->dt.index) {
 			if (checkIMatchLL(preCh, postCh)) {
-				Common::goTo(centerX, botY + distY);
-				cout << "I";
 				return 1;
 			}
 		}
 		if (checkLMatchLL(preCh, postCh)) {
-			Common::goTo(centerX, botY + distY);
-			cout << "L";
 			return 1;
 		}
 		if (checkUMatchLL(preCh, postCh)) {
-			Common::goTo(centerX, botY + distY);
-			cout << "U";
 			return 1;
 		}
 		if (checkZMatchLL(preCh, postCh)) {
-			Common::goTo(centerX, botY + distY);
-			cout << "Z";
 			return 1;
 		}
 		return 0;
