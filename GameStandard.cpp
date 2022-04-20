@@ -250,13 +250,6 @@ void GameStandard::inputProcess() {
 							sltedY = -1;
 							Common::goTo(x, y);
 						}
-						if (hint == 1) {
-							hint = 0;
-							Common::goTo(0, 0);
-							cout << " " << endl;
-							cout << "    " << endl;
-							cout << "    " << endl;
-						}
 						sltCnt = 0;
 					}
 				}
@@ -270,11 +263,16 @@ void GameStandard::inputProcess() {
 			pauseScreen();
 			break;
 		case 8: //H
-			hint++;
-			Common::goTo(0, 0);
-			cout << sg.ch << endl;
-			cout << sg.preRow << ", " << sg.preCol << endl;
-			cout << sg.postRow << ", " << sg.postCol << endl;
+			time_taken += double(clock() - time) / CLOCKS_PER_SEC;
+			selectColor(gameX + sg.preCol * distX, gameY + sg.preRow * distY, LIGHT_GREEN, BLACK, sg.preRow, sg.preCol);
+			selectColor(gameX + sg.postCol * distX, gameY + sg.postRow * distY, LIGHT_GREEN, BLACK, sg.postRow, sg.postCol);
+			Sleep(500);
+			printGameBoard();
+			x = gameX;
+			y = gameY;
+			sltRow = 0;
+			sltCol = 0;
+			time = clock();
 			break;
 		}
 		if (chCnt == size * size) {

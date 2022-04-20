@@ -426,9 +426,10 @@ void GameDifficult::inputProcess() {
 			pauseScreen();
 			break;
 		case 8: //H
+			time_taken += double(clock() - time) / CLOCKS_PER_SEC;
 			printRow(L.Li[sltRow], sltRow, -1);
-			selectColor(gameX + sg.pre->dt.index * distX, gameY + sg.pre->dt.row * distY, RED, BLACK, sg.pre);
-			selectColor(gameX + sg.post->dt.index * distX, gameY + sg.post->dt.row * distY, RED, BLACK, sg.post);
+			selectColor(gameX + sg.pre->dt.index * distX, gameY + sg.pre->dt.row * distY, LIGHT_GREEN, BLACK, sg.pre);
+			selectColor(gameX + sg.post->dt.index * distX, gameY + sg.post->dt.row * distY, LIGHT_GREEN, BLACK, sg.post);
 			Sleep(500);
 			printBoard();
 			int i = 0;
@@ -441,6 +442,7 @@ void GameDifficult::inputProcess() {
 			sltIndex = 0;
 			x = gameX + sltIndex * distX;
 			y = gameY + sltRow * distY;
+			time = clock();
 			break;
 		}
 		if (chCnt == size * size) {
