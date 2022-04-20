@@ -25,4 +25,6 @@ struct GameDifficult {
 	bool checkUMatchLL(Node*, Node*);
 	bool checkZMatchLL(Node*, Node*);
 	bool matchCheckLL(Node*, Node*);
+	void pauseScreen();
+	void pauseInput();
 };

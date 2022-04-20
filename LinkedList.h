@@ -22,13 +22,14 @@ struct List {
 struct LinkedList {
 	List* Li;
 
-	LinkedList();
 	static Node* createNode(cData);
 	static Node* findNode(List, int, int);
 	static List createList(Node*);
 	static void addTail(List &, cData);
+	static List* setList(int);
 	static void removeTail(List&);
 	static void removeNode(List&, Node*);
 	static void removeTwice(List&, Node*, Node*);
-	static List* setList(int);
+	static void removeList(List&);
+	static void delLists(List*, int);
 };

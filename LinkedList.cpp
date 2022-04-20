@@ -39,6 +39,65 @@ void LinkedList::addTail(List &L, cData data) {
 	}
 }
 
+List* LinkedList::setList(int n) {
+	List* L = new List[n];
+	cData tmp = { ' ', 0, 0 };
+	for (int i = 0; i < n; i++) {
+		tmp.row = i;
+		for (int j = 0; j < n; j++) {
+			tmp.index = j;
+			addTail(L[i], tmp);
+		}
+	}
+	srand(time(NULL));
+	int sz = n * n;
+	int* position = new int[sz];
+	bool* check = new bool[sz];
+	for (int i = 0; i < sz; i++) {
+		*(check + i) = 0;
+	}
+	for (int i = 0; i < sz; i++) {
+		int tmp;
+		do {
+			tmp = rand() % sz;
+		} while (check[tmp]);
+		position[i] = tmp;
+		check[tmp] = 1;
+	}
+
+	int ch[26];
+	for (int i = 0; i < 26; i++) {
+		ch[i] = 0;
+	}
+	for (int i = 0; i < sz - 1; i += 2) {
+		int tmp = rand() % 26;
+		if (sz / 2 <= 26) {
+			do {
+				tmp = rand() % 26;
+			} while (ch[tmp]);
+			ch[tmp] = 1;
+		}
+		else {
+			do {
+				tmp = rand() % 26;
+			} while (ch[tmp] == 2);
+			ch[tmp]++;
+		}
+		//char value = tmp + 'A';
+		char value = 'A';
+		int row = position[i] / n;
+		int index = position[i] % n;
+		findNode(L[row], row, index)->dt.ch = value;
+		row = position[i + 1] / n;
+		index = position[i + 1] % n;
+		findNode(L[row], row, index)->dt.ch = value;
+	}
+
+	delete[] check;
+	delete[] position;
+	return L;
+}
+
 void LinkedList::removeTail(List &L) {
 	if (L.head == NULL) {
 		return;
@@ -80,61 +139,14 @@ void LinkedList::removeTwice(List& L, Node* pre, Node* post) {
 	removeTail(L);
 }
 
-List* LinkedList::setList(int n) {
-	List* L = new List[n];
-	cData tmp = { ' ', 0, 0 };
+void LinkedList::removeList(List& L) {
+	while (L.head != NULL) {
+		removeTail(L);
+	}
+}
+
+void LinkedList::delLists(List* L, int n) {
 	for (int i = 0; i < n; i++) {
-		tmp.row = i;
-		for (int j = 0; j < n; j++) {
-			tmp.index = j;
-			addTail(L[i], tmp);
-		}
+		removeList(L[i]);
 	}
-
-	int sz = n * n;
-	int* position = new int[sz];
-	bool* check = new bool[sz];
-	for (int i = 0; i < sz; i++) {
-		*(check + i) = 0;
-	}
-	for (int i = 0; i < sz; i++) {
-		int tmp;
-		do {
-			tmp = rand() % sz;
-		} while (check[tmp]);
-		position[i] = tmp;
-		check[tmp] = 1;
-	}
-
-	int ch[26];
-	for (int i = 0; i < 26; i++) {
-		ch[i] = 0;
-	}
-	for (int i = 0; i < sz - 1; i += 2) {
-		int tmp = rand() % 26;
-		if (sz / 2 <= 26) {
-			do {
-				tmp = rand() % 26;
-			} while (ch[tmp]);
-			ch[tmp] = 1;
-		}
-		else {
-			do {
-				tmp = rand() % 26;
-			} while (ch[tmp] == 2);
-			ch[tmp]++;
-		}
-		char value = tmp + 'A';
-		//char value = 'A';
-		int row = position[i] / n;
-		int index = position[i] % n;
-		findNode(L[row], row, index)->dt.ch = value;
-		row = position[i + 1] / n;
-		index = position[i + 1] % n;
-		findNode(L[row], row, index)->dt.ch = value;
-	}
-
-	delete[] check;
-	delete[] position;
-	return L;
 }

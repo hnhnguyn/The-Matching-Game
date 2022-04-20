@@ -5,7 +5,6 @@ const string GameDifficult::pauseList[3] = { "RESUME", "REPLAY", "BACK TO MENU" 
 
 GameDifficult::GameDifficult() {
 	Common::consoleSetup();
-	LinkedList::LinkedList();
 	L.Li = LinkedList::setList(size);
 	chCnt = 0;
 	time_taken = 0;
@@ -19,60 +18,6 @@ void GameDifficult::selectColor(int x, int y, int background, int text, Node* ch
 	std::cout << " " << ch->dt.ch << " ";
 	Common::setColor(BLACK, WHITE);
 }
-
-//bool GameDifficult::checkMove() {
-//	char c;
-//	for (int i = 0; i < size * size; i++) {
-//		if (LinkedList::findNode(L.Li[i / size], i / size, i % size)->dt.ch != ' ') {
-//			c = LinkedList::findNode(L.Li[i / size], i / size, i % size)->dt.ch;
-//		}
-//		else {
-//			continue;
-//		}
-//		for (int j = i + 1; j < size * size; j++) {
-//			if (LinkedList::findNode(L.Li[j / size], j / size, j % size)->dt.ch == c) {
-//				if (matchCheck(i / size, i % size, j / size, j % size)) {
-//					return 1;
-//				}
-//			}
-//		}
-//	}
-//	return 0;
-//}
-
-//void GameDifficult::shuffle() {
-//	bool* check = new bool[size * size];
-//	for (int i = 0; i < size * size; i++) {
-//		check[i] = 0;
-//	}
-//	int* position = new int[size * size];
-//	for (int i = 0; i < size * size; i++) {
-//		int tmp;
-//		do {
-//			tmp = rand() % (size * size);
-//		} while (check[tmp]);
-//		check[tmp] = 1;
-//		position[i] = tmp;
-//	}
-//	char** tmpCh;
-//	tmpCh = new char* [size];
-//	for (int i = 0; i < size; i++) {
-//		tmpCh[i] = new char[size];
-//	}
-//	for (int i = 0; i < size * size; i++) {
-//		tmpCh[position[i] / size][position[i] % size] = LinkedList::findNode(L.Li[i / size], i / size, i % size)->dt.ch;
-//	}
-//	for (int i = 0; i < size * size; i++) {
-//		LinkedList::findNode(L.Li[i / size], i / size, i % size)->dt.ch = tmpCh[i / size][i % size];
-//	}
-//
-//	delete[] check;
-//	delete[] position;
-//	for (int i = 0; i < size; i++) {
-//		delete[] tmpCh[i];
-//	}
-//	delete[] tmpCh;
-//}
 
 void GameDifficult::printRow(List L, int i, int index) {
 	int x = 0;
@@ -111,9 +56,6 @@ void GameDifficult::printBoard() {
 
 void GameDifficult::gameOutput() {
 	system("cls");
-	/*while (!checkMove()) {
-		shuffle();
-	}*/
 	printBoard();
 	inputProcess();
 }
@@ -127,6 +69,7 @@ void GameDifficult::inputProcess() {
 	int x = 0;
 	int y = 0;
 	int sltedX = -1, sltedY = -1, sltCnt = 0;
+	time = clock();
 	do {
 		input = Common::getInput();
 		switch (input) {
@@ -158,12 +101,10 @@ void GameDifficult::inputProcess() {
 				do {
 					sltRow--;
 					i -= distY;
-					/*Common::goTo(centerX, botY);
-					cout << L.Li[sltRow].tail->dt.index;*/
 					if (sltRow < 0) {
 						break;
 					}
-				} while (L.Li[sltRow].tail->dt.index < sltIndex); //|| L.Li[sltRow].head == NULL
+				} while (L.Li[sltRow].tail->dt.index < sltIndex); 
 				if (sltRow < 0) {
 					sltRow = sltCh->dt.row;
 					selectColor(x, y, BRIGHT_WHITE, BLACK, sltCh);
@@ -188,12 +129,10 @@ void GameDifficult::inputProcess() {
 				do {
 					sltRow++;
 					i += distY;
-					/*Common::goTo(centerX, botY);
-					cout << L.Li[sltRow].tail->dt.index;*/
 					if (sltRow >= size) {
 						break;
 					}
-				} while (L.Li[sltRow].tail->dt.index < sltIndex); //|| L.Li[sltRow].head == NULL
+				} while (L.Li[sltRow].tail->dt.index < sltIndex); 
 				if (sltRow >= size) {
 					sltRow = sltCh->dt.row;
 					selectColor(x, y, BRIGHT_WHITE, BLACK, sltCh);
@@ -258,7 +197,7 @@ void GameDifficult::inputProcess() {
 									while (L.Li[sltRow].head->dt.index == -2) {
 										sltRow++;
 										i += distY;
-										if (sltRow = sltCh->dt.row) {
+										if (sltRow == sltCh->dt.row) {
 											break;
 										}
 									}
@@ -325,7 +264,7 @@ void GameDifficult::inputProcess() {
 									while (L.Li[sltRow].head->dt.index == -2) {
 										sltRow++;
 										i += distY;
-										if (sltRow = sltCh->dt.row) {
+										if (sltRow == sltCh->dt.row) {
 											break;
 										}
 									}
@@ -375,8 +314,8 @@ void GameDifficult::inputProcess() {
 			Menu::menuOutput();
 			break;
 		case 7: //P
-			//time_taken += double(clock() - time / double(CLOCKS_PER_SEC)) / 1000;
-			//pauseScreen();
+			time_taken += double(clock() - time) / CLOCKS_PER_SEC;
+			pauseScreen();
 			break;
 		//case 8: //H
 				//hint++;
@@ -387,35 +326,25 @@ void GameDifficult::inputProcess() {
 				//break;
 		}
 		if (chCnt == size * size) {
-			cout << "Done";
-			//time_taken += double(clock() - time / double(CLOCKS_PER_SEC)) / 1000;
-			//Menu::menuDoneOutput(time_taken);
+			time_taken += double(clock() - time) / CLOCKS_PER_SEC;
+			Menu::menuDoneOutput(time_taken);
 		}
 	} while (input != 0);
-	//LinkedList::delLinkedList(L.Li, size);
-	//GameDifficult::pauseScreen();
+	GameDifficult::pauseScreen();
 }
 
 bool GameDifficult::matchCheckLL(Node* preCh, Node* postCh) {
 	if (preCh->dt.ch == postCh->dt.ch) {
 		if (checkIMatchLL(preCh, postCh)) {
-			Common::goTo(centerX, botY);
-			cout << "I";
 			return 1;
 		}
 		if (checkLMatchLL(preCh, postCh)) {
-			Common::goTo(centerX, botY);
-			cout << "L";
 			return 1;
 		}
 		if (checkUMatchLL(preCh, postCh)) {
-			Common::goTo(centerX, botY);
-			cout << "U";
 			return 1;
 		}
 		if (checkZMatchLL(preCh, postCh)) {
-			Common::goTo(centerX, botY);
-			cout << "Z";
 			return 1;
 		}
 		return 0;
@@ -503,7 +432,7 @@ bool GameDifficult::checkUMatchLL(Node* preCh, Node* postCh) {
 		if (preCh->dt.row > 0 && L.Li[preCh->dt.row - 1].tail->dt.index >= preCh->dt.index) {
 			return 0;
 		}
-		for (int i = preCh->dt.row + 1; i < postCh->dt.row; i++) {
+		for (int i = preCh->dt.row; i < postCh->dt.row; i++) {
 			if (L.Li[i].tail->dt.index >= postCh->dt.index) {
 				return 0;
 			}
@@ -519,9 +448,14 @@ bool GameDifficult::checkUMatchLL(Node* preCh, Node* postCh) {
 				return 0;
 			}
 		}
+		if (preCh->dt.row + 1 == postCh->dt.row) {
+			if (L.Li[postCh->dt.row].tail->dt.index >= preCh->dt.index) {
+				return 0;
+			}
+		}
 		return 1;
 	}
-	return 1;
+	return 0;
 }
 
 bool GameDifficult::checkZMatchLL(Node* preCh, Node* postCh) {
@@ -550,59 +484,60 @@ bool GameDifficult::checkZMatchLL(Node* preCh, Node* postCh) {
 	return 1;
 }
 
-//void GameDifficult::pauseScreen() {
-//	system("cls");
-//	for (int i = 0; i < sizeof(pauseList) / sizeof(pauseList[0]); i++) {
-//		int x = centerX;
-//		int y = menuY + i * distY;
-//		Common::goTo(x, y);
-//		if (y == menuY) {
-//			cout << "> ";
-//		}
-//		cout << pauseList[i];
-//	}
-//	pauseInput();
-//}
+void GameDifficult::pauseScreen() {
+	system("cls");
+	for (int i = 0; i < sizeof(pauseList) / sizeof(pauseList[0]); i++) {
+		int x = centerX;
+		int y = menuY + i * distY;
+		Common::goTo(x, y);
+		if (y == menuY) {
+			cout << "> ";
+		}
+		cout << pauseList[i];
+	}
+	pauseInput();
+}
 
-//void GameDifficult::pauseInput() {
-//	int slti = 0;
-//	int input = -1;
-//	int x = centerX;
-//	int y = menuY + distY * slti;
-//	do {
-//		input = Common::getInput();
-//		switch (input) {
-//		case 3:
-//			if (slti != (sizeof(pauseList) / sizeof(pauseList[0]) - 1)) {
-//				Common::goTo(x, y);
-//				cout << pauseList[slti] << "  ";
-//				slti++;
-//				y += distY;
-//				Common::goTo(x, y);
-//				cout << "> " << pauseList[slti];
-//			}
-//			break;
-//		case 2:
-//			if (slti != 0) {
-//				Common::goTo(x, y);
-//				cout << pauseList[slti] << "  ";
-//				slti--;
-//				y -= distY;
-//				Common::goTo(x, y);
-//				cout << "> " << pauseList[slti];
-//			}
-//			break;
-//		case 5:
-//			if (slti == 0) {
-//				gameOutput();
-//			}
-//			else if (slti == 1) {
-//				Menu::menuPlayOutput();
-//			}
-//			else if (slti == 2) {
-//				input = 0;
-//			}
-//			break;
-//	} while (input != 0);
-//	Menu::Menu();
-//}
+void GameDifficult::pauseInput() {
+	int slti = 0;
+	int input = -1;
+	int x = centerX;
+	int y = menuY + distY * slti;
+	do {
+		input = Common::getInput();
+		switch (input) {
+		case 3:
+			if (slti != (sizeof(pauseList) / sizeof(pauseList[0]) - 1)) {
+				Common::goTo(x, y);
+				cout << pauseList[slti] << "  ";
+				slti++;
+				y += distY;
+				Common::goTo(x, y);
+				cout << "> " << pauseList[slti];
+			}
+			break;
+		case 2:
+			if (slti != 0) {
+				Common::goTo(x, y);
+				cout << pauseList[slti] << "  ";
+				slti--;
+				y -= distY;
+				Common::goTo(x, y);
+				cout << "> " << pauseList[slti];
+			}
+			break;
+		case 5:
+			if (slti == 0) {
+				gameOutput();
+			}
+			else if (slti == 1) {
+				Menu::menuPlayOutput();
+			}
+			else if (slti == 2) {
+				input = 0;
+			}
+			break;
+		}
+	} while (input != 0);
+	Menu::Menu();
+}
