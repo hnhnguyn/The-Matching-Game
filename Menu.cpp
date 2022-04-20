@@ -201,6 +201,7 @@ void Menu::menuPlayInput() {
 				GameStandard::GameStandard();
 			}
 			else if (slti == 1) {
+				GameDifficult::GameDifficult();
 			}
 			else if (slti == 2) {
 				menuOutput();

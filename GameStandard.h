@@ -24,7 +24,7 @@ struct GameStandard {
 	double time_taken;
 
 	GameStandard();
-	void Genboard(int, int);
+	void printGameBoard();
 	void gameOutput();
 	void selectColor(int, int, int, int, int, int);
 	bool checkMove();

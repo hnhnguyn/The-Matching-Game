@@ -1,4 +1,5 @@
 ﻿#include "GameStandard.h"
+
 const string GameStandard::gameBtnList[4] = { "BACK TO MENU: B", "PAUSE: P", "HINT: H" };
 const string GameStandard::menuBackList[2] = { "YES", "NO" };
 const string GameStandard::pauseList[3] = { "RESUME", "REPLAY", "BACK TO MENU" };
@@ -79,20 +80,9 @@ void GameStandard::shuffle() {
 	delete[] tmpCh;
 }
 
-void GameStandard::gameOutput() {
-	system("cls");
-	int j = 0; int i = 0;
-	while (!checkMove()) {
-		shuffle();
-	}
-	for (int i = 0; i < sizeof(gameBtnList) / sizeof(gameBtnList[0]); i++) {
-		int x = btnX;
-		int y = btnY + distY * i;
-		Common::goTo(x, y);
-		cout << gameBtnList[i];
-	}
-	int x = gameX + distX * j;
-	int y = gameY + distY * i;
+void GameStandard::printGameBoard() {
+	int x = gameX;
+	int y = gameY;
 
 	int a = x;						// a la vi tri cua canh ben phai cua cai khung
 	int _y = gameY + distY * size;	// _y la vi tri cua canh duoi cung cua cai khung
@@ -140,14 +130,28 @@ void GameStandard::gameOutput() {
 		}
 		// End
 	}
+}
+
+void GameStandard::gameOutput() {
+	system("cls");
+	while (!checkMove()) {
+		shuffle();
+	}
+	for (int i = 0; i < sizeof(gameBtnList) / sizeof(gameBtnList[0]); i++) {
+		int x = btnX;
+		int y = btnY + distY * i;
+		Common::goTo(x, y);
+		cout << gameBtnList[i];
+	}
+	printGameBoard();
 	inputProcess();
 }
 
 void GameStandard::inputProcess() {
 	int sltRow = 0, sltCol = 0;
 	int input = -1;
-	int x = gameX + distX * sltRow;
-	int y = gameY + distY * sltCol;
+	int x = gameX;
+	int y = gameY;
 	int sltedX = -1, sltedY = -1, sltedRow = -1, sltedCol = -1, sltCnt = 0;
 	int hint = 0;
 	time = clock();
@@ -247,13 +251,6 @@ void GameStandard::inputProcess() {
 							sltedY = -1;
 							Common::goTo(x, y);
 						}
-						if (hint == 1) {
-							hint = 0;
-							Common::goTo(0, 0);
-							cout << " " << endl;
-							cout << "    " << endl;
-							cout << "    " << endl;
-						}
 						sltCnt = 0;
 					}
 				}
@@ -267,11 +264,16 @@ void GameStandard::inputProcess() {
 			pauseScreen();
 			break;
 		case 8: //H
-			hint++;
-			Common::goTo(0, 0);
-			cout << sg.ch << endl;
-			cout << sg.preRow << ", " << sg.preCol << endl;
-			cout << sg.postRow << ", " << sg.postCol << endl;
+			time_taken += double(clock() - time) / CLOCKS_PER_SEC;
+			selectColor(gameX + sg.preCol * distX, gameY + sg.preRow * distY, LIGHT_GREEN, BLACK, sg.preRow, sg.preCol);
+			selectColor(gameX + sg.postCol * distX, gameY + sg.postRow * distY, LIGHT_GREEN, BLACK, sg.postRow, sg.postCol);
+			Sleep(500);
+			printGameBoard();
+			x = gameX;
+			y = gameY;
+			sltRow = 0;
+			sltCol = 0;
+			time = clock();
 			break;
 		}
 		if (chCnt == size * size) {
@@ -315,6 +317,7 @@ bool GameStandard::checkIMatch(int preRow, int preCol, int postRow, int postCol)
 		for (int i = preRow + 1; i < postRow; i++) {
 			if (charArr.arr[i][preCol] != ' ') {
 				check = 0;
+				break;
 			}
 		}
 	}
@@ -323,6 +326,7 @@ bool GameStandard::checkIMatch(int preRow, int preCol, int postRow, int postCol)
 			for (int i = preCol + 1; i < postCol; i++) {
 				if (charArr.arr[preRow][i] != ' ') {
 					check = 0;
+					break;
 				}
 			}
 		}
@@ -330,6 +334,7 @@ bool GameStandard::checkIMatch(int preRow, int preCol, int postRow, int postCol)
 			for (int i = postCol + 1; i < preCol; i++) {
 				if (charArr.arr[preRow][i] != ' ') {
 					check = 0;
+					break;
 				}
 			}
 		}
