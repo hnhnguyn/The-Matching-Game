@@ -73,8 +73,8 @@ char** CharArr::gen2DArr(int row, int col, int n) {
 
 	for (int i = 0; i < row; i++) {
 		for (int j = 0; j < col; j++) {
-			//gen2DArr[i][j] = ch[i * col + j];
-			gen2DArr[i][j] = 'A';
+			gen2DArr[i][j] = ch[i * col + j];
+			//gen2DArr[i][j] = 'A';
 		}
 	}
 

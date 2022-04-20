@@ -83,8 +83,8 @@ List* LinkedList::setList(int n) {
 			} while (ch[tmp] == 2);
 			ch[tmp]++;
 		}
-		//char value = tmp + 'A';
-		char value = 'A';
+		char value = tmp + 'A';
+		//char value = 'A';
 		int row = position[i] / n;
 		int index = position[i] % n;
 		findNode(L[row], row, index)->dt.ch = value;
