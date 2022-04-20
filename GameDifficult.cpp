@@ -19,6 +19,38 @@ void GameDifficult::selectColor(int x, int y, int background, int text, Node* ch
 	Common::setColor(BLACK, WHITE);
 }
 
+bool GameDifficult::checkMove(List*) {
+	for (int i = 0; i < size; i++) {
+		if (L.Li[i].head->dt.index == -2) {
+			continue;
+		}
+		else {
+			for (int j = 0; j <= L.Li[i].tail->dt.index; j++) {
+				for (int m = 0; m < size; m++) {
+					if (L.Li[m].head->dt.index == -2) {
+						continue;
+					}
+					else {
+						for (int n = 0; n <= L.Li[m].tail->dt.index; n++) {
+							if (i == m && j == n) {
+								continue;
+							}
+							else {
+								if (matchCheckLL(LinkedList::findNode(L.Li[i], i, j), LinkedList::findNode(L.Li[m], m, n))) {
+									sg.pre = LinkedList::findNode(L.Li[i], i, j);
+									sg.post = LinkedList::findNode(L.Li[m], m, n);
+									return 1;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return 0;
+}
+
 void GameDifficult::printRow(List L, int i, int index) {
 	int x = 0;
 	int y = distY * i;
@@ -71,6 +103,17 @@ void GameDifficult::inputProcess() {
 	int sltedX = -1, sltedY = -1, sltCnt = 0;
 	time = clock();
 	do {
+		if (!checkMove(L.Li)) {
+			time_taken += (clock() - time) / CLOCKS_PER_SEC;
+			Common::goTo(centerX, botY);
+			cout << "Out of moves";
+			Sleep(5000);
+			Menu::menuDoneOutput(time_taken);
+		}
+		else {
+			Common::goTo(centerX, botY);
+			cout << sg.pre->dt.row << sg.pre->dt.index << " " << sg.post->dt.row << sg.post->dt.index;
+		}
 		input = Common::getInput();
 		switch (input) {
 		case 1: //LEFT
@@ -335,16 +378,26 @@ void GameDifficult::inputProcess() {
 
 bool GameDifficult::matchCheckLL(Node* preCh, Node* postCh) {
 	if (preCh->dt.ch == postCh->dt.ch) {
-		if (checkIMatchLL(preCh, postCh)) {
-			return 1;
+		if (preCh->dt.row == postCh->dt.row || preCh->dt.index == postCh->dt.index) {
+			if (checkIMatchLL(preCh, postCh)) {
+				Common::goTo(centerX, botY + distY);
+				cout << "I";
+				return 1;
+			}
 		}
 		if (checkLMatchLL(preCh, postCh)) {
+			Common::goTo(centerX, botY + distY);
+			cout << "L";
 			return 1;
 		}
 		if (checkUMatchLL(preCh, postCh)) {
+			Common::goTo(centerX, botY + distY);
+			cout << "U";
 			return 1;
 		}
 		if (checkZMatchLL(preCh, postCh)) {
+			Common::goTo(centerX, botY + distY);
+			cout << "Z";
 			return 1;
 		}
 		return 0;
@@ -481,7 +534,7 @@ bool GameDifficult::checkZMatchLL(Node* preCh, Node* postCh) {
 		}
 		return 0;
 	}
-	return 1;
+	return 0;
 }
 
 void GameDifficult::pauseScreen() {
