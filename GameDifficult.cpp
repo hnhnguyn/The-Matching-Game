@@ -15,7 +15,7 @@ GameDifficult::GameDifficult() {
 void GameDifficult::selectColor(int x, int y, int background, int text, Node* ch) {
 	Common::goTo(x, y);
 	Common::setColor(background, text);
-	std::cout << " " << ch->dt.ch << " ";
+	cout << " " << ch->dt.ch << " ";
 	Common::setColor(BLACK, WHITE);
 }
 
@@ -323,7 +323,7 @@ void GameDifficult::inputProcess() {
 								LinkedList::removeTwice(L.Li[sltRow], sltedCh, sltCh);
 								if (check != 0) {
 									sltIndex -= check;
-									x = sltIndex * distX;
+									x = gameX + sltIndex * distX;
 									sltCh = L.Li[sltRow].tail;
 								}
 								printRow(L.Li[sltRow], sltRow, sltIndex);
@@ -385,7 +385,7 @@ void GameDifficult::inputProcess() {
 								LinkedList::removeNode(L.Li[sltRow], sltCh);
 								if (check == 1) {
 									sltIndex--;
-									x = sltIndex * distX;
+									x = gameX + sltIndex * distX;
 									sltCh = L.Li[sltRow].tail;
 								}
 								printRow(L.Li[sltRow], sltRow, sltIndex);
