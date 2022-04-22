@@ -15,7 +15,7 @@ Menu::Menu() {
 void Menu::titleOutput() {
 	string title;
 	ifstream in;
-	in.open("title.txt");
+	in.open("files\\title.txt");
 	while (!in.eof()) {
 		getline(in, title);
 		cout << title << endl;
@@ -246,7 +246,7 @@ void Menu::menuLeaderboard() {
 	string s, name, time;
 	string title;
 	ifstream in;
-	in.open("leaderboard.txt");
+	in.open("files\\leaderboard.txt");
 	while (!in.eof()) {
 		Common::goTo(x, y);
 		getline(in, title);
@@ -261,7 +261,7 @@ void Menu::menuLeaderboard() {
 	Common::goTo(x + (distX * 4), y);
 	cout << "SCORE";
 	y += distY + 1;
-	in.open("topPlayers.txt");
+	in.open("files\\topPlayers.txt");
 	in.ignore();
 	while (!in.eof()) {
 		getline(in, s);
@@ -296,7 +296,7 @@ void Menu::menuTutorial() {
 	system("cls");
 	string tuto;
 	ifstream in;
-	in.open("tutorial.txt");
+	in.open("files\\tutorial.txt");
 	while (!in.eof()) {
 		getline(in, tuto);
 		cout << tuto << endl;
@@ -320,7 +320,7 @@ void Menu::menuAbout() {
 	system("cls");
 	ifstream in;
 	string line;
-	in.open("about.txt");
+	in.open("files\\about.txt");
 	while (!in.eof()) {
 		getline(in, line);
 		cout << line << endl;
@@ -411,7 +411,7 @@ void Menu::topPlayCheck() {
 	Player players[11];
 	ifstream in;
 	int n = 0;
-	in.open("topPlayers.txt");
+	in.open("files\\topPlayers.txt");
 	in.ignore();
 	if (!in.eof()) {
 		while (!in.eof()) {
@@ -430,7 +430,7 @@ void Menu::topPlayCheck() {
 			}
 		}
 		ofstream out;
-		out.open("topPlayers.txt");
+		out.open("files\\topPlayers.txt");
 		if (n >= 10) {
 			n = 9;
 		}
@@ -443,7 +443,7 @@ void Menu::topPlayCheck() {
 		stringstream s;
 		s << time;
 		ofstream out;
-		out.open("topPlayers.txt");
+		out.open("files\\topPlayers.txt");
 		out << endl << name << " " << s.str();
 		out.close();
 	}

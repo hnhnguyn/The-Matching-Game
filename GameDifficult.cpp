@@ -443,6 +443,7 @@ void GameDifficult::inputProcess() {
 						sltedX = -1;
 						sltedY = -1;
 						sltedCh = NULL;
+						Common::matchedsound();
 					}
 					else {
 						selectColor(sltedX, sltedY, BLACK, WHITE, sltedCh);
@@ -690,6 +691,7 @@ void GameDifficult::pauseInput() {
 				gameOutput();
 			}
 			else if (slti == 1) {
+				LinkedList::deleteLists(L.Li, size);
 				Menu::menuPlayOutput();
 			}
 			else if (slti == 2) {
@@ -698,5 +700,6 @@ void GameDifficult::pauseInput() {
 			break;
 		}
 	} while (input != 0);
+	LinkedList::deleteLists(L.Li, size);
 	Menu::Menu();
 }

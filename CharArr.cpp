@@ -81,3 +81,10 @@ char** CharArr::gen2DArr(int row, int col, int n) {
 	delete[] ch;
 	return gen2DArr;
 }
+
+void CharArr::deleteArr(char** ch, int row) {
+	for (int i = 0; i < row; i++) {
+		delete[] ch[i];
+	}
+	delete[] ch;
+}

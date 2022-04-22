@@ -31,5 +31,5 @@ struct LinkedList {
 	static void removeNode(List&, Node*);
 	static void removeTwice(List&, Node*, Node*);
 	static void removeList(List&);
-	static void delLists(List*, int);
+	static void deleteLists(List*, int);
 };

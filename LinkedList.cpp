@@ -140,12 +140,13 @@ void LinkedList::removeTwice(List& L, Node* pre, Node* post) {
 }
 
 void LinkedList::removeList(List& L) {
-	while (L.head != NULL) {
+	while (L.head->chNext != NULL) {
 		removeTail(L);
 	}
+	delete L.head;
 }
 
-void LinkedList::delLists(List* L, int n) {
+void LinkedList::deleteLists(List* L, int n) {
 	for (int i = 0; i < n; i++) {
 		removeList(L[i]);
 	}

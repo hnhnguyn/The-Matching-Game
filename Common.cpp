@@ -12,11 +12,11 @@ void Common::consoleSetup() {
 }
 
 void Common::matchedsound() {
-	PlaySound(TEXT("correct.wav"), NULL, SND_FILENAME | SND_ASYNC);
+	PlaySound(TEXT("sounds\\correct.wav"), NULL, SND_FILENAME | SND_ASYNC);
 }
 
 void Common::selectsound() {
-	PlaySound(TEXT("select.wav"), NULL, SND_FILENAME | SND_ASYNC);
+	PlaySound(TEXT("sounds\\select.wav"), NULL, SND_FILENAME | SND_ASYNC);
 }
 
 void Common::goTo(SHORT posX, SHORT posY) {

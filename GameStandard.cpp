@@ -285,6 +285,7 @@ void GameStandard::inputProcess() {
 		}
 		if (chCnt == size * size) {
 			time_taken += double(clock() - time) / CLOCKS_PER_SEC;
+			CharArr::deleteArr(charArr.arr, size);
 			Menu::menuDoneOutput(time_taken);
 		}
 	} while (input != 0);
@@ -560,6 +561,7 @@ void GameStandard::pauseInput() {
 				gameOutput();
 			}
 			else if (slti == 1) {
+				CharArr::deleteArr(charArr.arr, size);
 				Menu::menuPlayOutput();
 			}
 			else if (slti == 2) {
@@ -568,5 +570,6 @@ void GameStandard::pauseInput() {
 			break;
 		}
 	} while (input != 0);
+	CharArr::deleteArr(charArr.arr, size);
 	Menu::Menu();
 }
