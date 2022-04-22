@@ -129,12 +129,49 @@ void GameDifficult::printRow(List L, int i, int index) {
 void GameDifficult::printBoard() {
 	int x = gameX;
 	int y = gameY;
+
+	int right = gameX - 1;
+	int top = gameY - 1;
+	int bot = gameY + distY * size - 1;
+
+	Common::goTo(x, top);
+	for (int j = 0; j < size; j++) {
+		cout << "---";
+		if (j + 1 != size) cout << '-';
+	}
+
+	Common::goTo(x, bot);
+	for (int j = 0; j < size; j++) {
+		cout << "---";
+		if (j + 1 != size) cout << '-';
+	}
+
 	for (int i = 0; i < size; i++) {
 		if (i == 0) {
 			printRow(L.Li[i], i, 0);
 		}
 		else {
 			printRow(L.Li[i], i, -1);
+		}
+	}
+
+	Common::goTo(x, y - 1);
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			x = gameX + distX * j;
+			y = gameY + distY * i;
+			Common::goTo(right, y);
+			cout << "|";
+			if (i + 1 != size) {
+				Common::goTo(right, y + 1);
+				cout << "|";
+			}
+		}
+		Common::goTo(x + 3, y);
+		cout << "|";
+		if (i + 1 != size) {
+			Common::goTo(x + 3, y + 1);
+			cout << "|";
 		}
 	}
 }

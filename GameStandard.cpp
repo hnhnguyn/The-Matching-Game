@@ -84,34 +84,34 @@ void GameStandard::printGameBoard() {
 	int x = gameX;
 	int y = gameY;
 
-	int a = x;						// a la vi tri cua canh ben phai cua cai khung
-	int _y = gameY + distY * size;	// _y la vi tri cua canh duoi cung cua cai khung
+	int right = gameX - 1;	
+	int top = gameY - 1;
+	int bot = gameY + distY * size - 1;	
 
-	// Code in ra canh tren va duoi
-	Common::goTo(x, y - 1);
+	Common::goTo(x, top);
 	for (int j = 0; j < size; j++) {
 		cout << "---";
 		if (j + 1 != size) cout << '-';
 	}
-	Common::goTo(x, _y - 1);
+
+	Common::goTo(x, bot);
 	for (int j = 0; j < size; j++) {
 		cout << "---";
 		if (j + 1 != size) cout << '-';
 	}
-	// End
+
 	Common::goTo(x, y - 1);
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < size; j++) {
 			x = gameX + distX * j;
 			y = gameY + distY * i;
-			// Code in ra canh ben phai
-			Common::goTo(a - 1, y);
+			Common::goTo(right, y);
 			cout << "|";
 			if (i + 1 != size) {
-				Common::goTo(a - 1, y + 1);
+				Common::goTo(right, y + 1);
 				cout << "|";
 			}
-			// End
+
 			Common::goTo(x, y);
 			if (x == gameX && y == gameY) {
 				Common::setColor(BRIGHT_WHITE, BLACK);
@@ -122,13 +122,12 @@ void GameStandard::printGameBoard() {
 				cout << " " << charArr.arr[i][j] << " ";
 			}
 		}
-		// Code in ra canh ben trai
+
 		cout << "|";
 		if (i + 1 != size) {
 			Common::goTo(x + 3, y + 1);
 			cout << "|";
 		}
-		// End
 	}
 }
 
@@ -265,6 +264,14 @@ void GameStandard::inputProcess() {
 			break;
 		case 8: //H
 			time_taken += double(clock() - time) / CLOCKS_PER_SEC;
+			for (int i = 0; i < size; i++) {
+				for (int j = 0; j < size; j++) {
+					x = gameX + distX * j;
+					y = gameY + distY * i;
+					Common::goTo(x, y);
+						cout << " " << charArr.arr[i][j] << " ";
+				}
+			}
 			selectColor(gameX + sg.preCol * distX, gameY + sg.preRow * distY, LIGHT_GREEN, BLACK, sg.preRow, sg.preCol);
 			selectColor(gameX + sg.postCol * distX, gameY + sg.postRow * distY, LIGHT_GREEN, BLACK, sg.postRow, sg.postCol);
 			Sleep(500);
