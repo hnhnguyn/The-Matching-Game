@@ -88,29 +88,11 @@ void GameStandard::printGameBoard() {
 	int top = gameY - 1;
 	int bot = gameY + distY * size - 1;	
 
-	Common::goTo(x, top);
-	for (int j = 0; j < size; j++) {
-		cout << "---";
-		if (j + 1 != size) cout << '-';
-	}
-
-	Common::goTo(x, bot);
-	for (int j = 0; j < size; j++) {
-		cout << "---";
-		if (j + 1 != size) cout << '-';
-	}
-
 	Common::goTo(x, y - 1);
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < size; j++) {
 			x = gameX + distX * j;
 			y = gameY + distY * i;
-			Common::goTo(right, y);
-			cout << "|";
-			if (i + 1 != size) {
-				Common::goTo(right, y + 1);
-				cout << "|";
-			}
 
 			Common::goTo(x, y);
 			if (x == gameX && y == gameY) {
@@ -121,12 +103,6 @@ void GameStandard::printGameBoard() {
 			else {
 				cout << " " << charArr.arr[i][j] << " ";
 			}
-		}
-
-		cout << "|";
-		if (i + 1 != size) {
-			Common::goTo(x + 3, y + 1);
-			cout << "|";
 		}
 	}
 }
@@ -242,7 +218,6 @@ void GameStandard::inputProcess() {
 							charArr.arr[sltRow][sltCol] = ' ';
 							selectColor(x, y, BRIGHT_WHITE, BLACK, sltRow, sltCol);
 							chCnt += 2;
-							Common::matchedsound();
 						}
 						else {
 							selectColor(sltedX, sltedY, BLACK, WHITE, sltedRow, sltedCol);

@@ -11,14 +11,6 @@ void Common::consoleSetup() {
 	hideScrollBars();
 }
 
-void Common::matchedsound() {
-	PlaySound(TEXT("sounds\\correct.wav"), NULL, SND_FILENAME | SND_ASYNC);
-}
-
-void Common::selectsound() {
-	PlaySound(TEXT("sounds\\select.wav"), NULL, SND_FILENAME | SND_ASYNC);
-}
-
 void Common::goTo(SHORT posX, SHORT posY) {
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD Position;

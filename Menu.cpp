@@ -55,7 +55,6 @@ void Menu::menuInput() {
 				y += distY;
 				Common::goTo(x, y);
 				cout << "> " << menuList[slti];
-				Common::selectsound();
 			}
 			break;
 		case 2:
@@ -66,7 +65,6 @@ void Menu::menuInput() {
 				y -= distY;
 				Common::goTo(x, y);
 				cout << "> " << menuList[slti];
-				Common::selectsound();
 			}
 			break;
 		case 5:
@@ -155,7 +153,6 @@ void Menu::nameInput() {
 void Menu::menuPlayOutput() {
 	system("cls");
 	Common::goTo(centerX, playY);
-	Common::selectsound();
 	for (int i = 0; i < sizeof(playList) / sizeof(playList[0]); i++) {
 		int x = centerX;
 		int y = playY + i * distY;
